@@ -21,9 +21,6 @@ def create_app():
     app.register_blueprint(api, url_prefix='/')
 
     # 设置静态文件目录
-    # @app.before_request
-    # def check_login():
-    #     return redirect("/login")
     return app
 
 

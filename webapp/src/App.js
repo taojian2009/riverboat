@@ -1,11 +1,11 @@
 import React from 'react';
 import Finance from "./pages";
 import Login from "./pages/login";
+import PrivateRoute from "./pages/auth"
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import "./App.css";
 
@@ -14,7 +14,7 @@ const App = () => {
     return (
         <Router>
             <Switch>
-                <Route path="/" exact render={() => <Finance/>}/>
+                <PrivateRoute path="/" exact component={Finance}/>
                 <Route path="/login" exact render={() => <Login/>}/>
             </Switch>
         </Router>
