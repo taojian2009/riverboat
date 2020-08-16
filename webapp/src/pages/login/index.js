@@ -12,7 +12,7 @@ class LoginForm extends React.Component {
                 if (username === "taojian" && password === "tj545242") {
                     localStorage.setItem("token", "taojian")
                     Toast.success("登录成功")
-                    this.props.history.push('/')
+                    window.location.href = "/"
                 }
             }
         });
