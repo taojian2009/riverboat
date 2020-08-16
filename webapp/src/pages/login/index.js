@@ -1,7 +1,7 @@
 import React from 'react';
 import {List, InputItem, WhiteSpace, Button, Result, WingBlank, Toast} from 'antd-mobile';
 import {createForm} from 'rc-form';
-import history from '../../utils/history.js'
+import axios from 'axios';
 
 class LoginForm extends React.Component {
 
@@ -9,11 +9,21 @@ class LoginForm extends React.Component {
         this.props.form.validateFields((error, value) => {
             if (error === null) {
                 const {username, password} = value;
-                if (username === "taojian" && password === "tj545242") {
-                    localStorage.setItem("token", "taojian")
-                    Toast.success("登录成功")
-                    window.location.href = "/"
+                // 请求后台登录, 并在登录后，将cookies存入到index.html中；
+                // TODO 使用后台登录
+                const data = {
+                    username, password
                 }
+                axios.post('/login', data)
+                    .then(res => {
+                        console.log(res.data)
+                        Toast.success("登录成功")
+                        localStorage.setItem("token", "username")
+                        window.location.href = "/"
+                    })
+                    .catch(err => {
+                        Toast.fail(err.toString())
+                    })
             }
         });
     }

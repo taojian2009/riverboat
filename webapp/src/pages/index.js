@@ -80,7 +80,9 @@ class App extends React.Component{
                             });
                         }}
                     >
-                        <Money/>
+                        <Money
+                            history={this.props.history}
+                        />
                     </TabBar.Item>
                 </TabBar>
             </div>

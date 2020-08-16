@@ -36,6 +36,14 @@ class Income(Model, BaseModel):
     catalog = Column(String(50), comment="收入分类", default="")
     is_passive = Column(Boolean, default=False, comment="是否为被动收入")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "amount": self.amount,
+            "name": self.name,
+            "category": self.category
+        }
+
 
 class Outcome(Model, BaseModel):
     __tablename__ = "outcome"
