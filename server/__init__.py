@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -23,8 +23,7 @@ def create_app():
     # 设置静态文件目录
     # @app.before_request
     # def check_login():
-    #     return "must login "
-
+    #     return redirect("/login")
     return app
 
 

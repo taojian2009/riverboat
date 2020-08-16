@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
+import { AppContainer } from "react-hot-loader";
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <AppContainer>
+              <App />
+      </AppContainer>
   </React.StrictMode>,
   document.getElementById('root')
 );
