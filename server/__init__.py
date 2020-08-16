@@ -11,7 +11,7 @@ db = SQLAlchemy()
 
 
 def create_app():
-    app = Flask(__name__, static_url_path="/../webapp/build")
+    app = Flask(__name__)
     CORS(app)
     # 添加配置信息
     app.config.from_object(Config)
