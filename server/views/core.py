@@ -31,16 +31,14 @@ def add_record():
     income = Income(**record)
     db.session.add(income)
     db.session.commit()
-    return jsonify(status="ok")
+    return jsonify(data=income.to_dict())
 
 
 @api.route('/income', methods=['GET', "DELETE"])
 def incomes():
     if request.method == "GET":
-        sql = "select * from income order by create_time desc limit 50"
-        df = pd.read_sql_query(sql, db.engine, parse_dates=["create_time", "update_time"])
-        df['create_time'] = df['create_time'].map(lambda x: x.strftime("%Y-%m-%d"))
-        data = df.to_dict(orient='records')
+        items = db.session.query(Income).order_by(Income.create_time.desc()).limit(5).all()
+        data = [item.to_dict() for item in items]
         return jsonify(data=data)
     if request.method == "DELETE":
         id = request.args.get("id")

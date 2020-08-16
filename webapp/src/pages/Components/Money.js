@@ -1,6 +1,7 @@
 import React from 'react';
 import {List, InputItem, NavBar, Icon, WhiteSpace, Button, Toast, Card, WingBlank} from 'antd-mobile';
 import axios from 'axios';
+import moment from 'moment';
 
 const {Item} = List;
 
@@ -33,11 +34,16 @@ class H5NumberInputExample extends React.Component {
     }
 
     onSubmit = () => {
-        const {amount, name, catalog} = this.state;
+        const {amount, name, catalog, incomes} = this.state;
         const data = {amount, name, catalog}
         axios.post('/add_record', data)
             .then(res => {
-                this.getIncomeList()
+                this.setState({
+                    incomes: [
+                        res.data.data,
+                        ...incomes,
+                    ]
+                })
             })
             .catch(err => {
                 Toast.fail(err.message)
@@ -57,12 +63,16 @@ class H5NumberInputExample extends React.Component {
     }
 
     deleteIncome = (id) => {
+        const {incomes} = this.state;
         const params = {id: id}
+        this.setState({
+            incomes: incomes.filter(item => item.id !== id)
+        })
         axios.delete('/income', {
             params: params
         }).then(res => {
-                this.getIncomeList()
-            })
+            console.log("ok")
+        })
             .catch(err => {
                 Toast.fail(err.message)
             })
