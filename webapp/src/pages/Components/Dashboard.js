@@ -75,10 +75,13 @@ class Dashboard extends React.PureComponent {
 
     getCardData = (extra) => {
         const {startTime, endTime, catalog, dateType} = this.state;
+
         const params = {
             startTime, endTime, catalog, dateType,
             ...extra
         }
+        const dateObj = dateTypes.filter(d => d.key === params.dateType)[0]
+        const titles = dateObj.titles
         axios.get('/card_data', {params: params})
             .then(res => {
                 const {items} = res.data.data
@@ -86,12 +89,13 @@ class Dashboard extends React.PureComponent {
                 const lastValue = items[1].amount.toFixed(2);
                 const change = currentValue - lastValue
                 const changeRate = (change / lastValue * 100).toFixed(2) + "%";
+
                 const cardData = {
                     change: change.toFixed(2),
                     changeRate: changeRate,
                     items: [
-                        {title: "今日收入", amount: currentValue},
-                        {title: "昨日收入", amount: lastValue},
+                        {title: titles[0], amount: currentValue},
+                        {title: titles[1], amount: lastValue},
                     ]
                 }
                 this.setState({

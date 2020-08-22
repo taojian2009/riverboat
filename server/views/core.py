@@ -68,7 +68,6 @@ def card_data():
     df['year'] = df.create_time.dt.year
     df['day'] = df.create_time.dt.strftime('%Y-%m-%d')
     df['week'] = df.create_time.dt.week
-    print(df.head(80))
     df = df[["amount", date_type]]
     df = df.groupby(by=[date_type]).sum()
     df["title"] = df.index
