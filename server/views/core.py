@@ -38,7 +38,7 @@ def add_record():
 @api.route('/income', methods=['GET', "DELETE"])
 def incomes():
     if request.method == "GET":
-        items = db.session.query(Income).order_by(Income.create_time.desc()).limit(5).all()
+        items = db.session.query(Income).order_by(Income.create_time.desc()).limit(20).all()
         data = [item.to_dict() for item in items]
         return jsonify(data=data)
     if request.method == "DELETE":

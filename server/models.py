@@ -42,7 +42,7 @@ class Income(Model, BaseModel):
             "amount": self.amount,
             "name": self.name,
             "catalog": self.catalog,
-            "create_time": self.create_time.strftime("%Y-%m-%d")
+            "create_time": self.create_time.strftime("%m-%d %H:%M:%S")
         }
 
 
