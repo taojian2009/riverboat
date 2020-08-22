@@ -7,6 +7,7 @@ import axios from 'axios';
 import * as Icons from '../../assets/icons/Icons.js'
 import styles from './dashboard.less';
 import moment from 'moment';
+import BarChart from './BarChart.js';
 
 
 // 我们用 insert-css 演示引入自定义样式
@@ -33,7 +34,8 @@ class Dashboard extends React.PureComponent {
                 {title: "今日收入", amount: 1000},
                 {title: "昨日收入", amount: 1000},
             ]
-        }
+        },
+        chartData: [],
     }
 
     componentDidMount() {
@@ -85,8 +87,8 @@ class Dashboard extends React.PureComponent {
         axios.get('/card_data', {params: params})
             .then(res => {
                 const {items} = res.data.data
-                const currentValue = items[0].amount.toFixed(2);
-                const lastValue = items[1].amount.toFixed(2);
+                const currentValue = items[items.length - 1].amount.toFixed(2);
+                const lastValue = items[items.length - 2].amount.toFixed(2);
                 const change = currentValue - lastValue
                 const changeRate = (change / lastValue * 100).toFixed(2) + "%";
 
@@ -99,7 +101,7 @@ class Dashboard extends React.PureComponent {
                     ]
                 }
                 this.setState({
-                    cardData
+                    cardData, chartData: items
                 })
             })
     }
@@ -112,9 +114,10 @@ class Dashboard extends React.PureComponent {
             dateType,
             startTime,
             endTime,
-            cardData
+            cardData,
+            chartData
         } = this.state;
-
+        console.log(chartData)
         return (
             <div className={styles.page}>
                 <div className={styles.header}>
@@ -157,7 +160,6 @@ class Dashboard extends React.PureComponent {
                     </div>
                     <div>
                         <Flex>
-
                             {cardData.items && cardData.items.map(({title, amount}) => (
                                 <Flex.Item>
                                     <span className={styles.cardTitle}>{title}</span><br/>
@@ -167,26 +169,17 @@ class Dashboard extends React.PureComponent {
                             ))}
                         </Flex>
                     </div>
+                </Card>
 
+                <div className={styles.placeholder}/>
+
+                <Card>
+                    <BarChart
+                        chartData={this.state.chartData}
+                    />
                 </Card>
 
 
-                {/*<WingBlank size="lg">*/}
-                {/*    <WhiteSpace size="lg"/>*/}
-                {/*    <Card>*/}
-                {/*        <Card.Header*/}
-                {/*            title="收入总计"*/}
-                {/*            thumb="https://gw.alipayobjects.com/zos/rmsportal/MRhHctKOineMbKAZslML.jpg"*/}
-                {/*            extra={<span>日期: </span>}*/}
-                {/*        />*/}
-                {/*        <Card.Body>*/}
-                {/*            <div>收入：￥{this.state.income} 元</div>*/}
-                {/*            <div>支出：￥{this.state.outcome} 元</div>*/}
-                {/*            <div>资产：￥{this.state.asset} 元</div>*/}
-                {/*        </Card.Body>*/}
-                {/*    </Card>*/}
-                {/*    <WhiteSpace size="lg"/>*/}
-                {/*</WingBlank>*/}
             </div>
 
         )

@@ -3,7 +3,7 @@ from flask_script import Manager
 
 app = create_app()
 
-app.debug = True
+# app.debug = True
 
 manager = Manager(app)
 
