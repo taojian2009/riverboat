@@ -68,7 +68,7 @@ def card_data():
     df['year'] = df.create_time.dt.year
 
     df['week'] = df.create_time.dt.week
-    df = df[["amount", de]]
+    df = df[["amount", date_type]]
     df = df.groupby(by=[date_type]).sum()
     df["title"] = df.index
     df = df.sort_values(by=["title"], ascending=True)
