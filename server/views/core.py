@@ -68,12 +68,12 @@ def card_data():
     df['year'] = df.create_time.dt.year
 
     df['week'] = df.create_time.dt.week
-    df = df[["amount", date_type]]
+    df = df[["amount", de]]
     df = df.groupby(by=[date_type]).sum()
     df["title"] = df.index
     df = df.sort_values(by=["title"], ascending=True)
     if date_type == "day":
-        df = df.head(7)
+        df = df.tail(7)
     payload = {"items": df.to_dict(orient="records"), "trend": {}}
 
     return jsonify(data=payload)
