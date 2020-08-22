@@ -2,7 +2,6 @@ import React from 'react';
 import Finance from "./pages";
 import Login from "./pages/login";
 import PrivateRoute from "./pages/auth"
-import history from "./utils/history.js"
 import {
   BrowserRouter as Router,
   Switch,
