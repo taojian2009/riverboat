@@ -13,7 +13,7 @@ const startOfMonth = moment().startOf("month").format(dateFormat)
 
 const endOfMonth = moment().endOf("month").format(dateFormat)
 
-const recent7Days = moment().subtract(7, "days").format(dateFormat)
+const recent7Days = moment().subtract(30, "days").format(dateFormat)
 // const startOfQuarter = moment().startOf("quarter").format(dateFormat)
 // const endOfQuarter = moment().endOf("quarter").format(dateFormat)
 export const dateTypes = [

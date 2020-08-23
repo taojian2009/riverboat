@@ -28,6 +28,9 @@ class BarChart extends React.PureComponent {
                     data: chartData.map(item => item.title),
                     axisTick: {
                         alignWithLabel: true
+                    },
+                    axisLabel: {
+                        rotate: 30
                     }
                 }
             ],
@@ -42,7 +45,7 @@ class BarChart extends React.PureComponent {
             ],
             series: [
                 {
-                    name: '直接访问',
+                    name: '收入',
                     type: 'bar',
                     barWidth: '60%',
                     data: chartData.map(item => Math.round(item.amount)),

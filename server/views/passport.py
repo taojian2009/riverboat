@@ -6,6 +6,4 @@ from server import db
 
 @api.route('/login', methods=['POST'])
 def login():
-    formData = request.json
-    print(formData)
     return "ok"
