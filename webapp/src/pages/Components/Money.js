@@ -120,12 +120,8 @@ class H5NumberInputExample extends React.Component {
                 <WhiteSpace size="xl"/>
 
                 <List>
-
-
                     {incomes && incomes.map(income => (
-
                         <List.Item>
-
                             <div>
                                 <span style={{float: 'left'}}>{income.name}&nbsp; &nbsp; &nbsp;
                                     <span>

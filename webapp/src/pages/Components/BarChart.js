@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
+import {barColor} from "../constants";
 
 // render echarts option.
 
 
 class BarChart extends React.PureComponent {
 
-    getOption = (chartData) => {
+    getOption = (chartData, dateType) => {
+
         const option = {
-            color: ['#3276f6'],
+            color: [barColor[dateType]],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -77,12 +79,12 @@ class BarChart extends React.PureComponent {
     }
 
     render() {
-        const {chartData} = this.props
+        const {chartData, dateType} = this.props
         if (chartData.length === 0) {
 
         }
 
-        return (<ReactEcharts option={this.getOption(chartData)}/>)
+        return (<ReactEcharts option={this.getOption(chartData, dateType)}/>)
     }
 }
 

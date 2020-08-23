@@ -24,6 +24,14 @@ export const dateTypes = [
     // {name: "季度", key: "quarter", startTime: startOfQuarter, endTime: endOfQuarter}
 ]
 
+
+export const barColor = {
+    day: "#3276f6",
+    week: "#6cc473",
+    month: "#ee6c66"
+}
+
+
 export const iconColor = {
     selected: "#33A3F4",
     notSelected: "#949494"

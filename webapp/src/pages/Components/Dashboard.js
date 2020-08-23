@@ -201,6 +201,7 @@ class Dashboard extends React.PureComponent {
                 <Card>
                     <BarChart
                         chartData={this.state.chartData}
+                        dateType={dateType}
                     />
                 </Card>
 
