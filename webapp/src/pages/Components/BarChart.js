@@ -1,9 +1,5 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react';
-import {barColor} from "../constants";
-
-// render echarts option.
-
 
 class BarChart extends React.PureComponent {
 
@@ -60,7 +56,7 @@ class BarChart extends React.PureComponent {
                 {
                     name: '收入',
                     type: 'bar',
-                    barWidth: '60%',
+                    barWidth: "20%",
                     data: chartData.map(item => Math.round(item.amount)),
                     label: {
                         normal: {
@@ -71,6 +67,22 @@ class BarChart extends React.PureComponent {
                             }
                         }
                     },
+                    itemStyle: {
+                        emphasis: {
+                            barBorderRadius: 7
+                        },
+                        normal: {
+                            barBorderRadius: 7,
+                            // color: new echarts.graphic.LinearGradient(
+                            //     0, 0, 1, 1,
+                            //     [
+                            //         {offset: 0, color: '#37BBF8'},
+                            //         {offset: 1, color: '#3977E6'},
+                            //
+                            //     ]
+                            // )
+                        }
+                    }
                 }
             ]
         };
