@@ -27,10 +27,18 @@ class BarChart extends React.PureComponent {
                     type: 'category',
                     data: chartData.map(item => item.title),
                     axisTick: {
-                        alignWithLabel: true
+                        alignWithLabel: true,
+                        show: false
                     },
                     axisLabel: {
                         rotate: 30
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {       //y轴
+                        show: false
+
                     }
                 }
             ],
