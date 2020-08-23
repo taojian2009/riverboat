@@ -10,7 +10,7 @@ class BarChart extends React.PureComponent {
     getOption = (chartData, dateType) => {
 
         const option = {
-            color: [barColor[dateType]],
+            color: ["#3276f6"],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -23,7 +23,6 @@ class BarChart extends React.PureComponent {
                 bottom: '3%',
                 containLabel: true
             },
-
             xAxis: [
                 {
                     type: 'category',
