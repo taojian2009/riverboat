@@ -56,7 +56,7 @@ class BarChart extends React.PureComponent {
                 {
                     name: '收入',
                     type: 'bar',
-                    barWidth: "20%",
+                    barWidth: "50%",
                     data: chartData.map(item => Math.round(item.amount)),
                     label: {
                         normal: {
