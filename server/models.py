@@ -18,6 +18,15 @@ class BaseModel(object):
         DateTime, default=datetime.now,
         onupdate=datetime.now, nullable=True, comment="更新时间")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "amount": self.amount,
+            "name": self.name,
+            "catalog": self.catalog,
+            "create_time": self.create_time.strftime("%m-%d %H:%M:%S")
+        }
+
 
 class User(Model, BaseModel):
     __tablename__ = "user"
@@ -35,15 +44,6 @@ class Income(Model, BaseModel):
     name = Column(String(50), comment="收入名称", default="")
     catalog = Column(String(50), comment="收入分类", default="")
     is_passive = Column(Boolean, default=False, comment="是否为被动收入")
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "amount": self.amount,
-            "name": self.name,
-            "catalog": self.catalog,
-            "create_time": self.create_time.strftime("%m-%d %H:%M:%S")
-        }
 
 
 class Outcome(Model, BaseModel):

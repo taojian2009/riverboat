@@ -1,10 +1,17 @@
 from . import api
 from flask import jsonify, render_template, request
-from server.models import Asset, Income, Outcome
+from server.models import Asset, Income, Outcome, Debt
 from server import db
 from sqlalchemy import func, and_
 from datetime import datetime, timedelta
 import pandas as pd
+
+model_dict = {
+    "income": Income,
+    "outcome": Outcome,
+    "asset": Asset,
+    "debt": Debt
+}
 
 
 @api.route('/')
@@ -29,21 +36,25 @@ def summary():
 @api.route('/add_record', methods=['POST'])
 def add_record():
     record = request.json
-    income = Income(**record)
+    model = model_dict.get(record['model'])
+    del record['model']
+    income = model(**record)
     db.session.add(income)
     db.session.commit()
     return jsonify(data=income.to_dict())
 
 
-@api.route('/income', methods=['GET', "DELETE"])
+@api.route('/model', methods=['GET', "DELETE"])
 def incomes():
     if request.method == "GET":
-        items = db.session.query(Income).order_by(Income.create_time.desc()).limit(20).all()
+        model = model_dict[request.args.get("model")]
+        items = db.session.query(model).order_by(model.create_time.desc()).limit(20).all()
         data = [item.to_dict() for item in items]
         return jsonify(data=data)
     if request.method == "DELETE":
         id = request.args.get("id")
-        income = db.session.query(Income).filter_by(id=id).first()
+        model = model_dict[request.args.get("model")]
+        income = db.session.query(model).filter_by(id=id).first()
         if income:
             db.session.delete(income)
             db.session.commit()
