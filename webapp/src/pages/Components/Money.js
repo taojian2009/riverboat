@@ -93,7 +93,7 @@ class H5NumberInputExample extends React.Component {
             })
         }
 
-        if (model[0] === "outcome") {
+        if (model[0] === "asset") {
             this.setState({
                 name: "招行",
                 catalog: "人民币",
