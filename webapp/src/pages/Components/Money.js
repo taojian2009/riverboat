@@ -1,7 +1,7 @@
 import React from 'react';
 import {List, InputItem, NavBar, Icon, WhiteSpace, Button, Toast, Card, WingBlank} from 'antd-mobile';
 import axios from 'axios';
-import moment from 'moment';
+import styles from './dashboard.less';
 
 const {Item} = List;
 
@@ -14,12 +14,6 @@ if (isIPhone) {
 }
 
 class H5NumberInputExample extends React.Component {
-
-    /*
-        {"amount": 36.6, "name": "知行优学", "catalog": "淘宝店", "create_time": datetime.now() + timedelta(days=0)}
-
-     */
-
 
     state = {
         amount: 0,
@@ -106,11 +100,13 @@ class H5NumberInputExample extends React.Component {
                         clear
                         placeholder=""
                         value={this.state.name}
+                        onChange={(name) => this.setState({name})}
                     >Name</InputItem>
                     <InputItem
                         clear
                         placeholder=""
                         value={this.state.catalog}
+                        onChange={(catalog) => this.setState({catalog})}
                     >Catalog</InputItem>
                     <WhiteSpace size="xl"/>
                     <List.Item>
@@ -122,34 +118,49 @@ class H5NumberInputExample extends React.Component {
 
                 <WhiteSpace size="xl"/>
                 <WhiteSpace size="xl"/>
-                {incomes && incomes.map(income => (
 
-                    <Card>
-                        <Card.Header
-                            title={income.name}
-                            extra={<span>
-                                日期: {income.create_time} &nbsp; &nbsp; &nbsp;
-                                <Icon
-                                    type={"cross"}
-                                    style={{
-                                        position: "absolute",
-                                        right: 5,
-                                        top: 5
-                                    }}
-                                    onClick={() => {
-                                        this.deleteIncome(income.id)
-                                    }}
-                                />
-                            </span>}
-                        />
-                        <Card.Body>
+                <List>
+
+
+                    {incomes && incomes.map(income => (
+
+                        <List.Item>
+
                             <div>
-                                <span style={{float: 'left'}}>店铺：{income.catalog}</span>
-                                <span style={{float: 'right'}}>金额：￥{income.amount} 元</span>
+                                <span style={{float: 'left'}}>{income.name}&nbsp; &nbsp; &nbsp;
+                                    <span>
+
+                                        <span className={styles.dateTag}>
+                                                      {income.create_time} &nbsp; &nbsp; &nbsp;
+                                        </span>
+
+
+                                        <Icon
+                                            type={"cross"}
+                                            style={{
+                                                position: "absolute",
+                                                right: 5,
+                                                top: 10
+                                            }}
+                                            onClick={() => {
+                                                this.deleteIncome(income.id)
+                                            }}
+                                        />
+                            </span>
+
+                                </span>
+                                <span style={{float: 'right', marginRight: 20}}>
+                                    <span className={styles.amount}>+￥{income.amount} 元</span>
+                                </span>
                             </div>
-                        </Card.Body>
-                    </Card>
-                ))}
+
+
+                        </List.Item>
+
+                    ))}
+
+                </List>
+
 
             </div>
         );
