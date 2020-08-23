@@ -16,7 +16,7 @@ class BarChart extends React.PureComponent {
                 }
             },
             grid: {
-                left: '3%',
+                left: -10,
                 right: '4%',
                 bottom: '3%',
                 containLabel: true
@@ -39,7 +39,11 @@ class BarChart extends React.PureComponent {
                     type: 'value',
                     axisTick: {
                         show: false
-                    }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    show: false
                 }
 
             ],
@@ -65,7 +69,6 @@ class BarChart extends React.PureComponent {
     }
 
     render() {
-        console.log(this.props.chartData)
         const {chartData} = this.props
         if (chartData.length === 0) {
 

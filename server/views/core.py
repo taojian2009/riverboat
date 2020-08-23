@@ -3,7 +3,7 @@ from flask import jsonify, render_template, request
 from server.models import Asset, Income, Outcome
 from server import db
 from sqlalchemy import func, and_
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 
 
@@ -55,10 +55,14 @@ def incomes():
 @api.route('/card_data', methods=['GET', "DELETE"])
 def card_data():
     start_time = request.args.get('startTime')
-    end_time = request.args.get('endTime')
+    end_time = datetime.strptime(request.args.get('endTime'), "%Y-%m-%d")
+    end_time = end_time + timedelta(days=1)
     catalog = request.args.get('catalog')
     date_type = request.args.get('dateType')
-    query = db.session.query(Income).order_by(Income.create_time.desc())
+    query = db.session.query(Income) \
+        .filter(and_(Income.create_time >= start_time,
+                     Income.create_time <= end_time)) \
+        .order_by(Income.create_time.desc())
     df = pd.read_sql_query(query.statement, db.engine)
     df['day'] = df.create_time.dt.strftime('%m-%d')
     if catalog != "全部":
@@ -70,7 +74,5 @@ def card_data():
     df = df.groupby(by=[date_type]).sum()
     df["title"] = df.index
     df = df.sort_values(by=["title"], ascending=True)
-    if date_type == "day":
-        df = df.tail(10)
     payload = {"items": df.to_dict(orient="records"), "trend": {}}
     return jsonify(data=payload)

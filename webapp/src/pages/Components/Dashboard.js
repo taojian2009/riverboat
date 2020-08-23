@@ -2,12 +2,15 @@ import React from 'react';
 import {Icon, List, NavBar, WhiteSpace, Tag, Flex, Button} from "antd-mobile";
 import {Tabs, Badge} from 'antd-mobile';
 import {Card, WingBlank} from 'antd-mobile';
-import {current, dateTypes} from "../constants";
+import {current, dateTypes, startOfToday, startOfMonth,startOfYear} from "../constants";
 import axios from 'axios';
 import * as Icons from '../../assets/icons/Icons.js'
 import styles from './dashboard.less';
 import moment from 'moment';
 import BarChart from './BarChart.js';
+import {Switch, Calendar} from 'antd-mobile';
+import enUS from 'antd-mobile/lib/calendar/locale/en_US';
+import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN';
 
 
 // 我们用 insert-css 演示引入自定义样式
@@ -26,7 +29,7 @@ class Dashboard extends React.PureComponent {
         catalog: "淘宝店",
         dateType: "day",
         startTime: dateTypes[0].startTime,
-        endTime: dateTypes[1].endTime,
+        endTime: dateTypes[0].endTime,
         cardData: {
             change: "120",
             changeRate: "+45%",
@@ -36,6 +39,7 @@ class Dashboard extends React.PureComponent {
             ]
         },
         chartData: [],
+        show: false
     }
 
     componentDidMount() {
@@ -68,7 +72,6 @@ class Dashboard extends React.PureComponent {
             startTime: dateRange.startTime,
             endTime: dateRange.endTime,
         }
-        console.log(params)
         this.setState({
             ...params
         })
@@ -106,6 +109,17 @@ class Dashboard extends React.PureComponent {
             })
     }
 
+    pickCalendar = () => {
+        this.setState({show: true})
+    }
+
+    onConfirm = (start, end) => {
+        const startTime = moment(start).format('YYYY-MM-DD')
+        const endTime = moment(end).format('YYYY-MM-DD')
+        this.getCardData({startTime, endTime})
+        this.setState({show: false, startTime, endTime})
+    }
+
 
     render() {
         const {
@@ -115,9 +129,15 @@ class Dashboard extends React.PureComponent {
             startTime,
             endTime,
             cardData,
-            chartData
+            show
         } = this.state;
-        console.log(chartData)
+
+        let config = {}
+        if (dateType === "day") {
+            config = {
+                showShortcut: true
+            }
+        }
         return (
             <div className={styles.page}>
                 <div className={styles.header}>
@@ -143,13 +163,17 @@ class Dashboard extends React.PureComponent {
                                 >{name}</Button>
                             ))
                         }
-                        <div className={styles.calendar}>
+                        <div
+                            className={styles.calendar}
+                            onClick={this.pickCalendar}
+                        >
                             <div className={styles.left}>
                                 <span>{moment(startTime).format("MM/DD")}</span>
                                 <span>~</span>
                                 <span>{moment(endTime).format("MM/DD")}</span>
                             </div>
-                            <div className={styles.right}><Icons.Calendar/></div>
+                            <div className={styles.right}>
+                                <Icons.Calendar/></div>
                         </div>
                     </div>
                 </div>
@@ -180,6 +204,19 @@ class Dashboard extends React.PureComponent {
                 </Card>
 
 
+                <Calendar
+                    {...config}
+                    visible={show}
+                    onConfirm={this.onConfirm}
+                    onCancel={()=>this.setState({show:false})}
+                    minDate={new Date(startOfYear)}
+                    defaultValue={[new Date(startTime), new Date(endTime)]}
+                    // getDateExtra={this.getDateExtra}
+                    // defaultDate={now}
+                    // minDate={new Date(+now - 5184000000)}
+                    // maxDate={new Date(+now + 31536000000)}
+                    initalMonths={24}
+                />
             </div>
 
         )
