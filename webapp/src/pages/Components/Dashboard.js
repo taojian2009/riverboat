@@ -2,7 +2,7 @@ import React from 'react';
 import {Icon, List, NavBar, WhiteSpace, Tag, Flex, Button} from "antd-mobile";
 import {Tabs, Badge} from 'antd-mobile';
 import {Card, WingBlank} from 'antd-mobile';
-import {current, dateTypes, startOfToday, startOfMonth,startOfYear} from "../constants";
+import {current, dateTypes, startOfToday, startOfMonth, startOfYear} from "../constants";
 import axios from 'axios';
 import * as Icons from '../../assets/icons/Icons.js'
 import styles from './dashboard.less';
@@ -110,7 +110,9 @@ class Dashboard extends React.PureComponent {
     }
 
     pickCalendar = () => {
-        this.setState({show: true})
+        if (this.state.dateType === "day") {
+            this.setState({show: true})
+        }
     }
 
     onConfirm = (start, end) => {
@@ -119,7 +121,6 @@ class Dashboard extends React.PureComponent {
         this.getCardData({startTime, endTime})
         this.setState({show: false, startTime, endTime})
     }
-
 
     render() {
         const {
@@ -208,7 +209,7 @@ class Dashboard extends React.PureComponent {
                     {...config}
                     visible={show}
                     onConfirm={this.onConfirm}
-                    onCancel={()=>this.setState({show:false})}
+                    onCancel={() => this.setState({show: false})}
                     minDate={new Date(startOfYear)}
                     defaultValue={[new Date(startTime), new Date(endTime)]}
                     // getDateExtra={this.getDateExtra}
