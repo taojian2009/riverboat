@@ -18,6 +18,8 @@ class BaseModel(object):
         DateTime, default=datetime.now,
         onupdate=datetime.now, nullable=True, comment="更新时间")
 
+
+class FinanceBase(BaseModel):
     def to_dict(self):
         return {
             "id": self.id,
@@ -28,7 +30,7 @@ class BaseModel(object):
         }
 
 
-class User(Model, BaseModel):
+class User(Model, FinanceBase):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     username = Column(String(20), comment="username")
@@ -37,7 +39,7 @@ class User(Model, BaseModel):
     email = Column(String(20), comment="email")
 
 
-class Income(Model, BaseModel):
+class Income(Model, FinanceBase):
     __tablename__ = "income"
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     amount = Column(Float, comment="金额", default=0)
@@ -46,7 +48,7 @@ class Income(Model, BaseModel):
     is_passive = Column(Boolean, default=False, comment="是否为被动收入")
 
 
-class Outcome(Model, BaseModel):
+class Outcome(Model, FinanceBase):
     __tablename__ = "outcome"
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     amount = Column(Float, comment="金额", default=0)
@@ -54,7 +56,7 @@ class Outcome(Model, BaseModel):
     catalog = Column(String(50), comment="支出分类", default="")
 
 
-class Asset(Model, BaseModel):
+class Asset(Model, FinanceBase):
     __tablename__ = "asset"
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     amount = Column(Float, comment="金额", default=0)
@@ -62,9 +64,24 @@ class Asset(Model, BaseModel):
     catalog = Column(String(50), comment="资产分类", default="")
 
 
-class Debt(Model):
+class Debt(Model, FinanceBase):
     __tablename__ = "debt"
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     amount = Column(Float, comment="金额", default=0)
     name = Column(String(50), comment="负债名称", default="")
     catalog = Column(String(50), comment="负债分类", default="")
+
+
+class Membership(Model, BaseModel):
+    __tablename__ = "membership"
+    id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
+    start_time = Column(DateTime, nullable=False, comment="会员开始时间")
+    end_time = Column(DateTime, nullable=False, comment="会员开始时间")
+    uuid = Column(String)
+
+
+class MembershipType(Model, BaseModel):
+    __tablename__ = "membership_type"
+    id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
+    name = Column(String(50))
+

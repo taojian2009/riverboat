@@ -1,7 +1,10 @@
 import React from 'react';
-import {List, InputItem, NavBar, Icon, WhiteSpace, Button, Toast, Picker, WingBlank} from 'antd-mobile';
+import {List, InputItem, NavBar, Icon, WhiteSpace, Button, Toast, Picker, WingBlank, Calendar} from 'antd-mobile';
 import axios from 'axios';
 import styles from './dashboard.less';
+import {startOfYear, startOfToday} from "../constants";
+import * as Icons from "../../assets/icons/Icons";
+import moment from 'moment';
 
 const {Item} = List;
 
@@ -16,6 +19,7 @@ if (isIPhone) {
 class H5NumberInputExample extends React.Component {
 
     state = {
+        show: false,
         amount: 0,
         name: "知行优学",
         catalog: "淘宝店",
@@ -26,7 +30,8 @@ class H5NumberInputExample extends React.Component {
             {label: "资产", value: "asset"},
             // {label: "负债", value: "debt"},
         ],
-        model: ['income']
+        model: ['income'],
+        createTime: moment()
     }
 
     componentDidMount = () => {
@@ -35,8 +40,8 @@ class H5NumberInputExample extends React.Component {
     }
 
     onSubmit = () => {
-        const {amount, name, catalog, incomes, model} = this.state;
-        const data = {amount, name, catalog, model: model[0]}
+        const {amount, name, catalog, incomes, model, createTime} = this.state;
+        const data = {amount, name, catalog, model: model[0], create_time: createTime.format("YYYY-MM-DD HH:MM:SS")}
         axios.post('/add_record', data)
             .then(res => {
                 this.setState({
@@ -104,6 +109,12 @@ class H5NumberInputExample extends React.Component {
 
     }
 
+    onConfirm = (value) => {
+        this.setState({show: false})
+        const createTime = moment(value)
+        this.setState({createTime})
+    }
+
 
     render() {
         const {incomes} = this.state;
@@ -151,6 +162,25 @@ class H5NumberInputExample extends React.Component {
                     >
                         <List.Item arrow="horizontal">账本类型</List.Item>
                     </Picker>
+
+                    <List.Item
+                        arrow="horizontal"
+                        onClick={() => this.setState({show: true})}
+                    >
+                        日期
+                        <div style={{float: 'right'}}>
+                            {this.state.createTime.format("YYYY-MM-DD")}
+                        </div>
+                    </List.Item>
+                    <Calendar
+                        visible={this.state.show}
+                        onConfirm={this.onConfirm}
+                        onCancel={() => this.setState({show: false})}
+                        minDate={new Date(startOfYear)}
+                        defaultValue={new Date(startOfToday)}
+                        initalMonths={24}
+                        type={"one"}
+                    />
                     <WhiteSpace size="xl"/>
 
                     <List.Item>
