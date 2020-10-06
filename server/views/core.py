@@ -35,7 +35,8 @@ def summary():
 
 @api.route('/add_record', methods=['POST'])
 def add_record():
-    record = request.json
+    record = dict(request.json)
+    del record['create_time']
     model = model_dict.get(record['model'])
     del record['model']
     income = model(**record)
@@ -78,12 +79,12 @@ def card_data():
     df['day'] = df.create_time.dt.strftime('%m-%d')
     if catalog != "全部":
         df = df[df.catalog == catalog]
-    df['month'] = df.create_time.dt.month.astype(str) + "月"
+    df['month'] = df.create_time.dt.month
     df['year'] = df.create_time.dt.year
-    df['week'] = df.create_time.dt.week.astype(str) + "周"
+    df['week'] = df.create_time.dt.week
     df = df[["amount", date_type]]
     df = df.groupby(by=[date_type]).sum()
     df["title"] = df.index
     df = df.sort_values(by=["title"], ascending=True)
-    payload = {"items": df.to_dict(orient="records"), "trend": {}}
+    payload = {"items": df.to_dict(orient="records"), "trend": {}, "dateType": date_type}
     return jsonify(data=payload)
