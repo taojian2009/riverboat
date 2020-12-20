@@ -1,9 +1,11 @@
 from server import create_app
+
 from flask_script import Manager
+
 
 app = create_app()
 
-# app.debug = True
+app.debug = True
 
 manager = Manager(app)
 

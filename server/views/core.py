@@ -1,7 +1,7 @@
 from . import api
 from flask import jsonify, render_template, request
-from server.models import Asset, Income, Outcome, Debt
-from server import db
+from server.model import Asset, Income, Outcome, Debt
+from server.models.base import db
 from sqlalchemy import func, and_
 from datetime import datetime, timedelta
 import pandas as pd
@@ -88,3 +88,5 @@ def card_data():
     df = df.sort_values(by=["title"], ascending=True)
     payload = {"items": df.to_dict(orient="records"), "trend": {}, "dateType": date_type}
     return jsonify(data=payload)
+
+
