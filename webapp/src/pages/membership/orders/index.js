@@ -1,31 +1,6 @@
 import React from 'react';
-import {Table, Card} from 'antd';
+import {Table, Card, Spin} from 'antd';
 
-
-const dataSource = [
-    {
-        key: '1',
-        id: '1',
-        buyer_email: 'taojian86@yahoo.com',
-        buyer_phone: "15123035649",
-        start_time: "2020-12-12",
-        valid_days: 32,
-        duration: 32,
-        address: '西湖区湖底公园1号',
-        is_valid: true,
-        url: 'https://www.baidu.com',
-        membership_type: "codecademy"
-    },
-    {
-        key: '1',
-        ID: '1',
-        buyer_email: 'ID',
-        buyer_phone: "12314124",
-        startTime: "2020-12-12",
-        valid_days: 32,
-        address: '西湖区湖底公园1号',
-    },
-];
 
 const columns = [
     {
@@ -35,8 +10,8 @@ const columns = [
     },
     {
         title: '会员类型',
-        dataIndex: 'membership_type',
-        key: 'membership_type',
+        dataIndex: 'membership_name',
+        key: 'membership_name',
     },
     {
         title: '买家邮箱',
@@ -50,8 +25,8 @@ const columns = [
     },
     {
         title: '会员开始时间',
-        dataIndex: 'start_time',
-        key: 'start_time',
+        dataIndex: 'start_date',
+        key: 'start_date',
     },
 
     {
@@ -68,22 +43,33 @@ const columns = [
         title: '是否过期',
         dataIndex: 'is_valid',
         key: 'is_valid',
+        render: (text, record) => {
+            return text ? "否" : "是"
+        }
     },
     {
         title: '链接',
-        dataIndex: 'url',
+        dataIndex: 'order_id',
         key: 'url',
         render: (text, record) => {
-            return <a href={text} target="_blank">链接</a>
+            const link = `/order/${text}`
+            return <a href={link} target="_blank">链接</a>
         }
     },
 ];
 
-const Orders = () => {
+const Orders = ({data}) => {
+    if (data.length === 0) {
+        return (<Spin tip={"loading..."}>
+            <Table size="small" pagination={false}/>
+        </Spin>)
+    }
+
+
     return (
         <Card title="订单列表" extra={<a href="#">More</a>} style={{height: 'calc(100vh - 10px)', margin: 10}}>
             <Table
-                dataSource={dataSource}
+                dataSource={data}
                 columns={columns}
                 size={'small'}
                 bordered

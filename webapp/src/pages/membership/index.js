@@ -1,20 +1,54 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import {Form, Input, InputNumber, Button, Card, Row, Col} from 'antd';
+import {Row, Col, message} from 'antd';
 import Orders from './orders';
 import SendForm from './orders/components/SendForm';
+import axios from 'axios';
 
 
-const Demo = () => {
+class Order extends React.Component {
+
+    state = {
+        orders: []
+    }
 
 
-    return (
+    componentDidMount = () => {
+        axios.get('/api/v1/orders')
+            .then(res => {
+                if (res.status === 200) {
+                    const {data} = res.data;
+                    this.setState({
+                        orders: data
+                    })
+                }
+            }).catch(error => {
+            message.error(error.message)
+        })
+    }
 
-        <Row>
-            <Col span={7}><SendForm/></Col>
-            <Col span={17}><Orders/></Col>
-        </Row>
-    );
-};
+    addOrder = (order) => {
+        this.setState({
+            orders: [order, ...this.state.orders]
+        })
+    }
 
-export default Demo;
+
+    render() {
+        const {orders} = this.state;
+        return (
+            <Row>
+                <Col span={7}>
+                    <SendForm
+                        addOrder={this.addOrder}
+                    /></Col>
+                <Col span={17}>
+                    <Orders
+                        data={orders}
+                    /></Col>
+            </Row>
+        )
+    }
+}
+
+export default Order;

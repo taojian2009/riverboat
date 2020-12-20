@@ -91,7 +91,7 @@ class Membership(Model, BaseModel):
 
     @classmethod
     def all(cls):
-        return cls.query
+        return cls.query.order_by(cls.id.desc())
 
     @property
     def member_type(self):
@@ -103,14 +103,32 @@ class Membership(Model, BaseModel):
 
     def to_dict(self):
         d = {field: getattr(self, field) for field in self.fields}
-        if self.orders:
-            d['orders'] = [o.to_dict() for o in self.orders]
         return d
+
+    def to_order_dict(self):
+        d = self.to_dict()
+        if self.orders:
+            orders = [o.to_dict() for o in self.orders]
+            d.update({"orders": orders})
+        return d
+
+    def to_user(self):
+        fields = ['name', "account", 'password', 'website', 'user_desc']
+        return {field: getattr(self, field) for field in fields}
 
 
 class Orders(Model, BaseModel):
     __tablename__ = "orders"
-    fields = ['id', 'buyer_email', 'buyer_phone', 'duration', 'start_date', 'order_id', 'membership_id', 'is_valid',
+    fields = ['id',
+              'buyer_email',
+              'buyer_phone',
+              'duration',
+              'start_date',
+              'expire_date',
+              'order_id',
+              'membership_id',
+              'is_valid',
+              'membership_name',
               'valid_days']
     id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
     buyer_email = Column(String(50), comment="用户电话")
@@ -124,9 +142,21 @@ class Orders(Model, BaseModel):
     def start_date(self):
         return datetime.strftime(self.start_time, '%Y-%m-%d %H:%M:%S')
 
+    @property
+    def membership_name(self):
+        return self.membership.name
+
+    @property
+    def membership(self):
+        return Membership.query.filter_by(id=self.membership_id).first()
+
     def to_dict(self):
         d = {field: getattr(self, field) for field in self.fields}
         return d
+
+    @classmethod
+    def all(cls):
+        return cls.query.order_by(cls.id.desc())
 
     @property
     def is_valid(self):
@@ -135,7 +165,7 @@ class Orders(Model, BaseModel):
     @property
     def valid_days(self):
         now = datetime.now()
-        duration = now + timedelta(days=self.duration) - self.start_time
+        duration = timedelta(days=self.duration) - (now - self.start_time)
         return duration.days
 
     @classmethod
@@ -154,8 +184,13 @@ class Orders(Model, BaseModel):
         }
         self.order_id = utils.generate_key(params)
 
+    def to_user(self):
+        d = self.to_dict()
+        if self.is_valid:
+            d.update(self.membership.to_user())
+        return d
 
-
-
-
-
+    @property
+    def expire_date(self):
+        expire = self.start_time + timedelta(days=self.duration)
+        return datetime.strftime(expire, "%Y-%m-%d %H:%M:%S")

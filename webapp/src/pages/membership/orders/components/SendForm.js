@@ -1,5 +1,6 @@
 import React from 'react';
 import {Form, Input, InputNumber, Button, Card, DatePicker, Select} from 'antd';
+import {message} from 'antd';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -40,12 +41,20 @@ class SendForm extends React.PureComponent {
     }
 
     onFinish = (data) => {
-        alert('send message')
+        const {addOrder} = this.props;
         data['start_time'] = data['start_time'].format('YYYY-MM-DD HH:mm:ss')
-        axios.post('/api/v1/membership', data)
+        axios.post('/api/v1/order', data)
             .then(res => {
                 console.log(res.data)
-            })
+                if (res.status === 200) {
+                    message.success("添加成功")
+                    // 刷新订单列表
+                    const {data} = res.data;
+                    addOrder(data)
+                }
+            }).catch(error => {
+            message.error("添加失败，联系你老公")
+        })
     }
 
 
@@ -79,7 +88,23 @@ class SendForm extends React.PureComponent {
                             ))}
                         </Select>
                     </Form.Item>
+                    <Form.Item
+                        name={'duration'}
+                        label="会员有效期/天"
+                    >
+                        <InputNumber min={0} max={10000} />
+                    </Form.Item>
 
+                    <Form.Item
+                        label="开始时间"
+                        name="start_time"
+                        initialValue={moment()}
+                        rules={[{required: true}]}
+                    >
+                        <DatePicker
+                            format={"YYYY-MM-DD"}
+                        />
+                    </Form.Item>
 
                     <Form.Item
                         name="buyer_email"
@@ -98,26 +123,14 @@ class SendForm extends React.PureComponent {
                         <Input/>
                     </Form.Item>
 
-
                     <Form.Item
-                        name={'duration'}
-                        label="会员有效期"
-
+                        name="buyer_phone"
+                        label="买家电话"
                     >
-                        <InputNumber min={0} max={10000} defaultValue={30}/>
-                        <span className="ant-form-text">天</span>
+                        <Input/>
                     </Form.Item>
 
-                    <Form.Item
-                        label="开始时间"
-                        name="start_time"
-                        initialValue={moment()}
-                        rules={[{required: true}]}
-                    >
-                        <DatePicker
-                            format={"YYYY-MM-DD"}
-                        />
-                    </Form.Item>
+
                     <Form.Item  {...formTailLayout}>
                         <Button type="primary" htmlType="submit">
                             Submit
