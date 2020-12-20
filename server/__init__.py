@@ -8,6 +8,8 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+app = Flask(__name__)
+
 
 class User(object):
     is_authenticated = True
@@ -19,7 +21,6 @@ def request_loader(request):
 
 
 def create_app():
-    app = Flask(__name__)
     CORS(app)
     # 添加配置信息
     app.config.from_object(Config)
@@ -28,12 +29,12 @@ def create_app():
     from .models.base import db
     db.init_app(app)
     from server.views import api
-    app.register_blueprint(api, url_prefix='/')
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.request_loader(request_loader)
     from . import handler
     handler.init_app(app)
+    app.register_blueprint(api, url_prefix='/')
     # 设置静态文件目录
     db.init_app(app)
     migrate = Migrate(app, db)

@@ -14,9 +14,9 @@ model_dict = {
 }
 
 
-@api.route('/')
+@api.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('/index.html')
 
 
 @api.route('/summary')
@@ -88,5 +88,3 @@ def card_data():
     df = df.sort_values(by=["title"], ascending=True)
     payload = {"items": df.to_dict(orient="records"), "trend": {}, "dateType": date_type}
     return jsonify(data=payload)
-
-

@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from server.models.base import db
+import time
 from sqlalchemy import (
     Boolean,
     Column,
@@ -180,7 +181,8 @@ class Orders(Model, BaseModel):
         params = {
             "buyer_email": self.buyer_email,
             "membership_id": self.membership_id,
-            "duration": self.duration
+            "duration": self.duration,
+            "timestamp": time.time()
         }
         self.order_id = utils.generate_key(params)
 

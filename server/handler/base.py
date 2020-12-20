@@ -3,12 +3,18 @@
 import time
 
 from inspect import isclass
-from flask import Blueprint, current_app, request
+from flask import Blueprint, current_app, request, render_template
 
 from flask_login import current_user, login_required
 from flask_restful import Resource, abort
 
 routes = Blueprint("riverboat", __name__)
+
+
+@routes.route('/', defaults={'path': ''})
+@routes.route('/<path:path>')
+def catch_all(path):
+    return render_template("/index.html")
 
 
 class BaseResource(Resource):
