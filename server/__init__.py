@@ -1,14 +1,19 @@
 from flask import Flask, redirect
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
+import bfa
 import pymysql
 
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
+
+
+@app.context_processor
+def bfa_flask():
+    return bfa.templatetags.bfa.fingerprint_input()
 
 
 class User(object):
@@ -22,10 +27,7 @@ def request_loader(request):
 
 def create_app():
     CORS(app)
-    # 添加配置信息
     app.config.from_object(Config)
-
-    # 添加蓝图
     from .models.base import db
     db.init_app(app)
     from server.views import api

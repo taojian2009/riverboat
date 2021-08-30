@@ -10,7 +10,7 @@ from sqlalchemy import (
     DateTime,
     Text,
     Integer)
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import ChoiceType
 import sqlalchemy_utils
@@ -138,6 +138,7 @@ class Orders(Model, BaseModel):
     duration = Column(Integer, default=0, nullable=True, comment="会员时长|天")
     membership_id = Column(Integer, ForeignKey('membership.id'))
     order_id = Column(String(50), comment="订单ID")
+    devices = relationship("Device")
 
     @property
     def start_date(self):
@@ -196,3 +197,15 @@ class Orders(Model, BaseModel):
     def expire_date(self):
         expire = self.start_time + timedelta(days=self.duration)
         return datetime.strftime(expire, "%Y-%m-%d %H:%M:%S")
+
+
+class Device(Model, BaseModel):
+    __tablename__ = "device"
+    id = Column(Integer, primary_key=True, autoincrement=True, comment="id主键")
+    order_id = Column(Integer, ForeignKey("orders.id"))
+    order = relationship("Orders",
+                         foreign_keys=[order_id],
+                         backref=backref("order_devices", cascade="all, delete-orphan")
+                         )
+    device_uuid = Column(String(50))
+
