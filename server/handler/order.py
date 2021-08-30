@@ -13,8 +13,8 @@ from flask import jsonify
 class OrdersResource(BaseResource):
 
     def get(self):
-        items = Orders.all().all()
-        data = [item.to_dict() for item in items]
+        items = Orders.all()
+        data = [item.to_dict() for item in items[:50]]
         return jsonify(data=data)
 
 
