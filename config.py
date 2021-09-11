@@ -7,3 +7,4 @@ class Config(object):
 
     if not os.environ.get("APP_ENV"):
         DEBUG = True
+    LOG_ENTRYPOINTS = ["/api/v1/order"]

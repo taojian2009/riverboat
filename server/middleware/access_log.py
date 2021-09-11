@@ -48,6 +48,9 @@ def stop_timer(response):
     if "static" in request.path or content_type != "application/json":
         logging.info("content type is not application/json, skipping logging into database")
         return response
+    endpoint = request.path
+    if endpoint not in Config.LOG_ENTRYPOINTS:
+        return response
     method = request.method
     username = request.remote_addr
     endpoint = request.path
