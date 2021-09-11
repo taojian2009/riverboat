@@ -1,4 +1,5 @@
 import os
+import logging
 
 
 class Config(object):
@@ -7,7 +8,12 @@ class Config(object):
 
     if not os.environ.get("APP_ENV"):
         DEBUG = True
-    LOG_ENTRYPOINTS = ["/api/v1/order"]
+    LOG_ENTRYPOINTS = ["/api/v1/order", "/get_code"]
     CSRF_COOKIE_NAME = "XSRF-TOKEN"
     SECRET_KEY = os.environ.get("SECRET_KEY")
     SERVER_HOST = os.environ.get("SERVER_HOST")
+    BASE_DIR = os.getcwd()
+    STATIC_FOLDER = os.path.join(BASE_DIR, 'webapp/build/static')
+    TEMPLATES_FOLDER = os.path.join(BASE_DIR, 'webapp/build')
+    LOG_FORMAT = '%(asctime)s pid:%(process)d %(levelname)s %(module)s - %(message)s'
+    Log_LEVEL = logging.INFO
