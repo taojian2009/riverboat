@@ -43,6 +43,8 @@ class SendForm extends React.PureComponent {
     onFinish = (data) => {
         const {addOrder} = this.props;
         data['start_time'] = data['start_time'].format('YYYY-MM-DD HH:mm:ss')
+        axios.defaults.xsrfHeaderName = "X-CSRFToken"
+        axios.defaults.xsrfCookieName = 'csrf_token'
         axios.post('/api/v1/order', data)
             .then(res => {
                 console.log(res.data)

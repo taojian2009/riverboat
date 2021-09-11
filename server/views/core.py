@@ -1,7 +1,7 @@
 import json
 from . import api
 
-from flask import jsonify, render_template, request, make_response
+from flask import jsonify, render_template, request, make_response, session
 from server.model import Asset, Income, Outcome, Debt, Orders, Device
 from server.models.base import db
 from sqlalchemy import func, and_
@@ -94,21 +94,25 @@ def card_data():
     return jsonify(data=payload)
 
 
+def fetch_code(order):
+    membership = order.membership
+    params = membership.email_config()
+    res = requests.get(Config.SERVER_HOST, params=params)
+    return res.json()
+
+
 @api.route("/get_code", methods=["POST"])
 def get_code():
     order_id = request.json.get("order_id")
     device_uuid = request.json.get("uuid")
     order = db.session.query(Orders).filter_by(order_id=order_id).first()
+    if session.get("order_id"):
+        return fetch_code(order)
     if not order.is_valid:
         return "you account is suspended, click this url to buy another one"
-
     device_uuids = [device.device_uuid for device in order.devices]
     if device_uuid in device_uuids:
-        # todo, fetch code from remote to user
-        membership = order.membership
-        params = membership.email_config()
-        res = requests.get(Config.SERVER_HOST, params=params)
-        return res.json()  # todo
+        return fetch_code(order)
     else:
         if len(device_uuids) >= 3:
             return make_response("WARNING", 401)

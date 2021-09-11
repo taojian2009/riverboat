@@ -9,7 +9,7 @@ server/.idea/
 # C extensions
 *.so
 prod.env
-
+dev.env
 # Distribution / packaging
 .Python
 build/

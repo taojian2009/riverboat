@@ -14,6 +14,8 @@ class LoginForm extends React.Component {
                 const data = {
                     username, password
                 }
+                axios.defaults.xsrfHeaderName = "X-CSRFToken"
+                axios.defaults.xsrfCookieName = 'csrf_token'
                 axios.post('/login', data)
                     .then(res => {
                         console.log(res.data)

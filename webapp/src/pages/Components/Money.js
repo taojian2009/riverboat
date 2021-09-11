@@ -42,6 +42,8 @@ class H5NumberInputExample extends React.Component {
     onSubmit = () => {
         const {amount, name, catalog, incomes, model, createTime} = this.state;
         const data = {amount, name, catalog, model: model[0], create_time: createTime.format("YYYY-MM-DD HH:MM:SS")}
+        axios.defaults.xsrfHeaderName = "X-CSRFToken"
+        axios.defaults.xsrfCookieName = 'csrf_token'
         axios.post('/add_record', data)
             .then(res => {
                 this.setState({
