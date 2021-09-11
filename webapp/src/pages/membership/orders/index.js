@@ -57,21 +57,21 @@ const columns = [
             return <a href={link} target="_blank">链接</a>
         }
     },
-    {
-        title: '删除',
-        dataIndex: 'order_id',
-        key: 'url',
-        render: (text, record) => {
-            const link = `/delete_order/${text}`
-            return (
-                <Button
-                    type="danger"
-                >
-                    <a href={link} target="_blank">删除</a>
-                </Button>
-            )
-        }
-    }
+    // {
+    //     title: '删除',
+    //     dataIndex: 'order_id',
+    //     key: 'url',
+    //     render: (text, record) => {
+    //         const link = `/delete_order/${text}`
+    //         return (
+    //             <Button
+    //                 type="danger"
+    //             >
+    //                 <a href={link} target="_blank">删除</a>
+    //             </Button>
+    //         )
+    //     }
+    // }
 ];
 
 const Orders = ({data}) => {
