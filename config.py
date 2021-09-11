@@ -3,8 +3,6 @@ import os
 
 class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('ALIYUN_SQLALCHEMY_URI')
-    SQLALCHEMY_DATABASE_URI = "mysql://root:Tj545242@!@106.15.183.240:3306/finance?charset=UTF8MB4"
-    # SQLALCHEMY_DATABASE_URI = "mysql://root:123456@localhost:3306/riverboat?charset=utf8"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     if not os.environ.get("APP_ENV"):
