@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
 import bfa
+from server.middleware.access_log import setup_access_log
 import pymysql
 
 pymysql.install_as_MySQLdb()
@@ -40,4 +41,5 @@ def create_app():
     # 设置静态文件目录
     db.init_app(app)
     migrate = Migrate(app, db)
+    setup_access_log(app)
     return app

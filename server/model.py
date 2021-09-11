@@ -209,3 +209,30 @@ class Device(Model, BaseModel):
                          )
     device_uuid = Column(String(50))
 
+
+class RequestLog(Model):
+    """
+    request log model
+    """
+    __tablename__ = "request_log"
+    id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
+    method = Column(String(50))
+    params = Column(Text)
+    url = Column(String(1024))
+    endpoint = Column(String(255))
+    content_type = Column(String(50))
+    duration_ms = Column(Integer)
+    http_status = Column(Integer)
+    username = Column(String(30))
+    remote_addr = Column(String(50))
+    browser = Column(String(50))
+    system = Column(String(50))
+    brand = Column(String(50))
+    is_mobile = Column(Boolean)
+    device_uuid = Column(String(50))
+    start_time = Column(DateTime, default=datetime.now, nullable=False)
+    end_time = Column(DateTime, default=datetime.now, nullable=False)
+    create_time = Column(DateTime, default=datetime.now, nullable=False)
+    update_time = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
+
+
