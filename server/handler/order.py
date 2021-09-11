@@ -35,11 +35,10 @@ class OrderResource(BaseResource):
         order = Orders.query.filter_by(order_id=order_id).first()
         devices = order.devices
         device_uuids = [device.device_uuid for device in devices]
-        print(device_uuid)
         if device_uuid in device_uuids:
             return jsonify(data=order.to_user())
         else:
-            if len(device_uuids) >= 2:
+            if len(device_uuids) >= 3:
                 return make_response("WARNING", 401)
             device = Device(device_uuid=device_uuid)
             devices.append(device)
