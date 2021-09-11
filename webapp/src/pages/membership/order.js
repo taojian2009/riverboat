@@ -58,7 +58,9 @@ class OrderDetail extends React.Component {
     state = {
         data: {},
         isEducative: false,
+        isMobile: false
     }
+
 
     componentDidMount = () => {
 
@@ -69,6 +71,7 @@ class OrderDetail extends React.Component {
         const uuid = device.get();
         const du = device.parse();
         const isMobile = du.isMobile;
+        this.setState({isMobile})
         const params = {
             order_id,
             uuid,
@@ -117,86 +120,146 @@ class OrderDetail extends React.Component {
         const {order_id} = match.params
         const device = new DeviceUUID();
         const uuid = device.get();
-        const {data} = this.state;
+        const {data, isMobile} = this.state;
         const loading = Object.keys(data).length === 0;
         if (loading) {
             return ""
         }
         const {account, password, website, expire_date, valid_days, membership_name} = data;
         const isEducative = membership_name.indexOf("educative") !== -1
+        const Mobile = (
+            <Content style={{padding: 10}}>
+                <div>
+                    <Row gutter={16}>
+                        <Col>
+                            <Card
+                                hoverable
+                                size={"small"}
+                                style={{height: '100%'}}
+
+                            >
+                                <h3 style={{fontSize: 16}}>已购会员信息</h3>
+                                <hr/>
+                                <Descriptions
+                                    column={1}
+                                >
+                                    <Descriptions.Item label="会员">{membership_name}</Descriptions.Item>
+                                    <Descriptions.Item label="账号">{account}</Descriptions.Item>
+                                    <Descriptions.Item label="密码">{password}</Descriptions.Item>
+                                    <Descriptions.Item label="到期时间">{expire_date}</Descriptions.Item>
+                                    <Descriptions.Item label="剩余天数">{valid_days}</Descriptions.Item>
+                                </Descriptions>
+                                {isEducative &&
+                                <AuthCode
+                                    order_id={order_id}
+                                    uuid={uuid}
+                                />}
+                            </Card>
+                        </Col>
+
+                        {products.map(product => {
+                            return (
+                                <Col>
+                                    <Card
+                                        hoverable
+                                        style={{margin: 5}}
+                                        onClick={() => this.onClickGood(product.good_id, product.url)}
+                                        cover={<img alt="点击购买"
+                                                    src={product.image}/>}
+                                    >
+                                        <Meta title={product.title}
+                                              description={<a
+                                                  onClick={() => this.onClickGood(product.good_id, product.url)}
+                                              >{product.website}</a>}/>
+                                    </Card>
+                                </Col>
+                            )
+                        })}
+
+
+                    </Row>
+                </div>
+
+            </Content>
+        )
+
+        const Desktop = (
+            <Content style={{padding: 10}}>
+                <div>
+                    <Row gutter={16}>
+                        <Col span={6}>
+                            <Card
+                                hoverable
+                                size={"small"}
+                                style={{height: '100%'}}
+
+                            >
+                                <h3 style={{fontSize: 16}}>已购会员信息</h3>
+                                <hr/>
+                                <Descriptions
+                                    column={1}
+                                >
+                                    <Descriptions.Item label="会员">{membership_name}</Descriptions.Item>
+                                    <Descriptions.Item label="账号">{account}</Descriptions.Item>
+                                    <Descriptions.Item label="密码">{password}</Descriptions.Item>
+                                    <Descriptions.Item label="到期时间">{expire_date}</Descriptions.Item>
+                                    <Descriptions.Item label="剩余天数">{valid_days}</Descriptions.Item>
+                                </Descriptions>
+                                {isEducative &&
+                                <AuthCode
+                                    order_id={order_id}
+                                    uuid={uuid}
+                                />}
+                            </Card>
+                        </Col>
+
+                        <Col span={18}>
+                            <Card
+                                hoverable
+                                size={"small"}
+                                style={{height: '100%'}}
+                            >
+                                <h3 style={{fontSize: 16}}>更多精品推荐</h3>
+                                <hr/>
+                                <Row gutter={16}>
+
+                                    {products.map(product => {
+                                        return (
+                                            <Col span={6}>
+                                                <Card
+                                                    hoverable
+                                                    style={{margin: 5}}
+                                                    onClick={() => this.onClickGood(product.good_id, product.url)}
+                                                    cover={<img alt="点击购买"
+                                                                src={product.image}/>}
+                                                >
+                                                    <Meta title={product.title}
+                                                          description={<a
+                                                              onClick={() => this.onClickGood(product.good_id, product.url)}
+                                                          >{product.website}</a>}/>
+                                                </Card>
+                                            </Col>
+                                        )
+                                    })}
+                                </Row>
+
+                            </Card>
+                        </Col>
+
+
+                    </Row>
+                </div>
+
+            </Content>
+        )
         return (
             <Layout>
                 <Header>
                     <p style={{color: "#fff", fontSize: 18}}>知行优学</p>
                 </Header>
                 <Layout style={{height: "calc(100vh-80px)"}}>
-                    <Content style={{padding: 10}}>
-                        <div>
-                            <Row gutter={16}>
-                                <Col span={6}>
-                                    <Card
-                                        hoverable
-                                        size={"small"}
-                                        style={{height: '100%'}}
-
-                                    >
-                                        <h3 style={{fontSize: 16}}>已购会员信息</h3>
-                                        <hr/>
-                                        <Descriptions
-                                            column={1}
-                                        >
-                                            <Descriptions.Item label="会员">{membership_name}</Descriptions.Item>
-                                            <Descriptions.Item label="账号">{account}</Descriptions.Item>
-                                            <Descriptions.Item label="密码">{password}</Descriptions.Item>
-                                            <Descriptions.Item label="到期时间">{expire_date}</Descriptions.Item>
-                                            <Descriptions.Item label="剩余天数">{valid_days}</Descriptions.Item>
-                                        </Descriptions>
-                                        {isEducative &&
-                                        <AuthCode
-                                            order_id={order_id}
-                                            uuid={uuid}
-                                        />}
-                                    </Card>
-                                </Col>
-
-                                <Col span={18}>
-                                    <Card
-                                        hoverable
-                                        size={"small"}
-                                        style={{height: '100%'}}
-                                    >
-                                        <h3 style={{fontSize: 16}}>更多精品推荐</h3>
-                                        <hr/>
-                                        <Row gutter={16}>
-
-                                            {products.map(product => {
-                                                return (
-                                                    <Col span={6}>
-                                                        <Card
-                                                            hoverable
-                                                            style={{margin: 5}}
-                                                            onClick={() => this.onClickGood(product.good_id, product.url)}
-                                                            cover={<img alt="点击购买"
-                                                                        src={product.image}/>}
-                                                        >
-                                                            <Meta title={product.title}
-                                                                  description={<a
-                                                                      onClick={() => this.onClickGood(product.good_id, product.url)}
-                                                                  >{product.website}</a>}/>
-                                                        </Card>
-                                                    </Col>
-                                                )
-                                            })}
-                                        </Row>
-
-                                    </Card>
-                                </Col>
-
-
-                            </Row>
-                        </div>
-
-                    </Content>
+                    {isMobile && Mobile}
+                    {!isMobile && Desktop}
                 </Layout>
             </Layout>
 
