@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
 # -*- coding:utf-8 -*-
-from flask import make_response, request
+from flask import make_response, request, session
 from server.models.base import db
 from server.model import Membership, Orders, Device
 from server.model import Income
 from server.utils import parse_human_time
 import bfa
+import logging
 
 from .base import BaseResource, paginate
 from flask import jsonify
@@ -35,6 +36,10 @@ class OrderResource(BaseResource):
         order = Orders.query.filter_by(order_id=order_id).first()
         devices = order.devices
         device_uuids = [device.device_uuid for device in devices]
+        if session.get("user_id"):
+            username = session.get("username")
+            logging.info(f"user <{username}> is logged in, skip check device")
+            return jsonify(data=order.to_user())
         if device_uuid in device_uuids:
             return jsonify(data=order.to_user())
         else:

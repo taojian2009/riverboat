@@ -7,8 +7,9 @@ from server.models.base import db
 from sqlalchemy import func, and_
 from datetime import datetime, timedelta
 import pandas as pd
-import requests
+import logging
 from config import Config
+from server import utils
 
 model_dict = {
     "income": Income,
@@ -94,25 +95,20 @@ def card_data():
     return jsonify(data=payload)
 
 
-def fetch_code(order):
-    membership = order.membership
-    params = membership.email_config()
-    res = requests.get(Config.SERVER_HOST, params=params)
-    return res.json()
-
-
 @api.route("/get_code", methods=["POST"])
 def get_code():
     order_id = request.json.get("order_id")
     device_uuid = request.json.get("uuid")
     order = db.session.query(Orders).filter_by(order_id=order_id).first()
-    if session.get("order_id"):
-        return fetch_code(order)
+    if session.get("user_id"):
+        username = session.get("username")
+        logging.info(f"user <{username}> is logged in, skip check device ")
+        return utils.fetch_code(order, Config.SERVER_HOST)
     if not order.is_valid:
         return "you account is suspended, click this url to buy another one"
     device_uuids = [device.device_uuid for device in order.devices]
     if device_uuid in device_uuids:
-        return fetch_code(order)
+        return utils.fetch_code(order, Config.SERVER_HOST)
     else:
         if len(device_uuids) >= 3:
             return make_response("WARNING", 401)

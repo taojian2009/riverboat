@@ -46,7 +46,6 @@ def stop_timer(response):
     """
     content_type = response.content_type.replace(" ", "")
     if "static" in request.path or content_type != "application/json":
-        logging.info("content type is not application/json, skipping logging into database")
         return response
     endpoint = request.path
     if endpoint not in Config.LOG_ENTRYPOINTS:
@@ -103,7 +102,6 @@ def stop_timer(response):
         ses.commit()
     except Exception as e:
         logging.error("fail to save request log to db %s" % str(e))
-    logging.info(request_log.endpoint)
     return response
 
 

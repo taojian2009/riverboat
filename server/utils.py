@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 import copy
 import hashlib
+import requests
 
 
 def request_loader(request):
@@ -25,3 +26,10 @@ cal = parsedatetime.Calendar()
 def parse_human_time(s):
     time_struct, _ = cal.parse(s)
     return datetime.fromtimestamp(mktime(time_struct))
+
+
+def fetch_code(order, host):
+    membership = order.membership
+    params = membership.email_config()
+    res = requests.get(host, params=params)
+    return res.json()

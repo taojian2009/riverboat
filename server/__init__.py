@@ -7,10 +7,16 @@ from flask_wtf.csrf import CSRFProtect
 import bfa
 from server.middleware.access_log import setup_access_log
 import pymysql
+import logging
 
 pymysql.install_as_MySQLdb()
 
-app = Flask(__name__)
+logging.basicConfig(level=Config.Log_LEVEL, format=Config.LOG_FORMAT, filemode='a')
+
+app = Flask(__name__,
+            static_folder=Config.STATIC_FOLDER,
+            template_folder=Config.TEMPLATES_FOLDER,
+            )
 
 csrf = CSRFProtect()
 
@@ -47,5 +53,3 @@ def create_app():
     setup_access_log(app)
     csrf.init_app(app)
     return app
-
-

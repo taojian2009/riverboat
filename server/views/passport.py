@@ -17,4 +17,5 @@ def login():
         abort(403)
     login_user(user)
     session["user_id"] = user.id
+    session['username'] = username
     return json.dumps(user.to_dict())
