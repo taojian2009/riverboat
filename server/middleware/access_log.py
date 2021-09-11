@@ -10,6 +10,7 @@ from server.model import RequestLog
 from sqlalchemy.ext.declarative import declarative_base
 from user_agents import parse
 from config import Config
+from server import utils
 
 Model = declarative_base()
 
@@ -79,6 +80,7 @@ def stop_timer(response):
     is_mobile = user_agent.is_mobile
     content_type = response.content_type.replace(" ", "")
     device_uuid = "" if "uuid" not in d else d['uuid']
+    extra = utils.parse_location(remote_addr)
 
     request_log = RequestLog(method=method,
                              url=url,
@@ -95,7 +97,9 @@ def stop_timer(response):
                              device_uuid=device_uuid,
                              is_mobile=is_mobile,
                              start_time=start_time,
-                             end_time=end_time)
+                             end_time=end_time,
+                             **extra
+                             )
     try:
         ses = create_session()
         ses.add(request_log)

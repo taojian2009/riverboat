@@ -33,3 +33,24 @@ def fetch_code(order, host):
     params = membership.email_config()
     res = requests.get(host, params=params)
     return res.json()
+
+
+def parse_location(ip):
+    data = {}
+    """
+        country_code = Column(String(10))
+    country_name = Column(String(10))
+    city = Column(String(10))
+    latitude = Column(Float)
+    longitude = Column(Float)"""
+    keys = ["country_code", "country_name", "city", "latitude", "longitude"]
+    try:
+        url = f"https://geolocation-db.com/json/{ip}&position=true"
+        res = requests.get(url)
+        payload = res.json()
+        for key in keys:
+            data[key] = payload[key]
+    except:
+        pass
+    finally:
+        return data
