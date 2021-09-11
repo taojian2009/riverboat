@@ -80,7 +80,7 @@ def stop_timer(response):
     is_mobile = user_agent.is_mobile
     content_type = response.content_type.replace(" ", "")
     device_uuid = "" if "uuid" not in d else d['uuid']
-    extra = utils.parse_location(remote_addr)
+    # extra = utils.parse_location(remote_addr)
 
     request_log = RequestLog(method=method,
                              url=url,
@@ -98,7 +98,7 @@ def stop_timer(response):
                              is_mobile=is_mobile,
                              start_time=start_time,
                              end_time=end_time,
-                             **extra
+                             # **extra
                              )
     try:
         ses = create_session()
