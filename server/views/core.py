@@ -131,3 +131,10 @@ def delete_order(order_id):
     db.session.delete(order)
     db.session.commit()
     return "删除成功: " + order_id
+
+
+@api.route("/click_good")
+def click_goods():
+    good_id = request.args.get("good_id")
+    url = f"https://item.taobao.com/item.html?id={good_id}"
+    return jsonify(status="ok")

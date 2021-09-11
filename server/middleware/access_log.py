@@ -49,6 +49,7 @@ def stop_timer(response):
     if "static" in request.path or content_type != "application/json":
         return response
     endpoint = request.path
+    print(endpoint, Config.LOG_ENTRYPOINTS)
     if endpoint not in Config.LOG_ENTRYPOINTS:
         return response
     method = request.method

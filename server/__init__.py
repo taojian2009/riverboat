@@ -4,6 +4,8 @@ from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
+from flask_wtf import csrf
+
 import bfa
 from server.middleware.access_log import setup_access_log
 import pymysql
@@ -18,8 +20,6 @@ app = Flask(__name__,
             template_folder=Config.TEMPLATES_FOLDER,
             )
 
-csrf = CSRFProtect()
-
 
 @app.context_processor
 def bfa_flask():
@@ -33,6 +33,13 @@ class User(object):
 def request_loader(request):
     user = User()
     return user
+
+
+@app.after_request
+def set_cookie(response):
+    csrf_token = csrf.generate_csrf()
+    response.set_cookie("csrf_token", csrf_token)
+    return response
 
 
 def create_app():
@@ -51,5 +58,5 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     setup_access_log(app)
-    csrf.init_app(app)
+    CSRFProtect(app)
     return app
