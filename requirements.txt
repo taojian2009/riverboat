@@ -19,7 +19,6 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 Mako==1.1.5
 MarkupSafe==1.1.1
-mysqlclient==2.0.3
 numpy==1.19.5
 pandas==1.0.5
 parsedatetime==2.6
