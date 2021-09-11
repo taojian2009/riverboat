@@ -1,6 +1,6 @@
-import json
+import logging
 from . import api
-from flask import jsonify, request, abort, session
+from flask import jsonify, request, abort, session, redirect
 from server.models.base import db
 from server.model import User
 from flask_login import login_user
@@ -18,4 +18,6 @@ def login():
     login_user(user)
     session["user_id"] = user.id
     session['username'] = username
-    return json.dumps(user.to_dict())
+    if session.get("next"):
+        return redirect(session.get("next"))
+    return redirect("/")

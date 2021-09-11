@@ -1,7 +1,7 @@
 import json
 from . import api
 
-from flask import jsonify, render_template, request, make_response, session
+from flask import jsonify, render_template, request, make_response, session, redirect
 from server.model import Asset, Income, Outcome, Debt, Orders, Device
 from server.models.base import db
 from sqlalchemy import func, and_
@@ -116,4 +116,18 @@ def get_code():
         order.devices.append(device)
         db.session.commit()
         # todo give code to user
-        return jsonify(data=order.to_user())  # todo
+        return utils.fetch_code(order, Config.SERVER_HOST)  # todo
+
+
+@api.route('/delete_order/<order_id>')
+def delete_order(order_id):
+    if not session.get("user_id"):
+        session['next'] = request.endpoint
+        print(request.endpoint)
+        return redirect('/login')
+    order = db.session.query(Orders).filter_by(order_id=order_id).first()
+    if not order:
+        return "查询无此订单: " + order_id
+    db.session.delete(order)
+    db.session.commit()
+    return "删除成功: " + order_id

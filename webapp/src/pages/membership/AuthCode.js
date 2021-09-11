@@ -10,7 +10,7 @@ const ClipContent = ({text}) => (
         text={text}
         onCopy={() => message.success("copied")}
     >
-        <Tooltip placement="topRight" title={"复制验证码"}>
+        <Tooltip placement="bottomRight" title={"复制验证码"}>
             <CopyOutlined/>
         </Tooltip>
     </CopyToClipboard>
@@ -57,7 +57,7 @@ class AuthCode extends React.PureComponent {
             <div style={{position: "relative"}}>
 
                 <Space>
-                    <Tooltip placement="topRight" title={"点击获取educative验证码"}>
+                    <Tooltip placement="bottomRight" title={"点击获取educative验证码"}>
                         {!loading &&
                         <Button
                             type={"primary"}
