@@ -1,6 +1,7 @@
 import React from 'react';
 import {Card, message, Descriptions, Button} from 'antd';
 import axios from 'axios';
+import AuthCode from "./AuthCode";
 import {DeviceUUID} from 'device-uuid';
 
 
@@ -49,12 +50,17 @@ class OrderDetail extends React.Component {
 
 
     render() {
+        const {match} = this.props;
+        const {order_id} = match.params
+        const device = new DeviceUUID();
+        const uuid = device.get();
         const {data} = this.state;
         const loading = Object.keys(data).length === 0;
         if (loading) {
             return ""
         }
         const {account, password, website, expire_date, valid_days, membership_name} = data;
+        const isEducative = membership_name.indexOf("educative") !== -1
         return (
             <div>
                 <Card
@@ -75,7 +81,11 @@ class OrderDetail extends React.Component {
                         <Descriptions.Item label="到期时间">{expire_date}</Descriptions.Item>
                         <Descriptions.Item label="剩余天数">{valid_days}</Descriptions.Item>
                     </Descriptions>
-
+                    {isEducative &&
+                    <AuthCode
+                        order_id={order_id}
+                        uuid={uuid}
+                    />}
 
                 </Card>
             </div>

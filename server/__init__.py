@@ -3,6 +3,7 @@ from config import Config
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 import bfa
 from server.middleware.access_log import setup_access_log
 import pymysql
@@ -10,6 +11,8 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
+
+csrf = CSRFProtect()
 
 
 @app.context_processor
@@ -42,4 +45,7 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     setup_access_log(app)
+    csrf.init_app(app)
     return app
+
+

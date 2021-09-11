@@ -84,6 +84,7 @@ class Membership(Model, BaseModel):
     name = Column(String(50), comment="会员名称")
     account = Column(String(50), comment="账号")
     password = Column(String(50), comment="密码")
+    pwd=Column(String(50), comment="邮箱密码")
     membership_type = Column(Integer, comment="会员类型")
     website = Column(String(50), comment="网站")
     user_desc = Column(Text, comment="使用说明")
@@ -113,6 +114,12 @@ class Membership(Model, BaseModel):
             d.update({"orders": orders})
         return d
 
+    def email_config(self):
+        return {
+            "email": self.account,
+            "password": self.pwd
+        }
+
     def to_user(self):
         fields = ['name', "account", 'password', 'website', 'user_desc']
         return {field: getattr(self, field) for field in fields}
@@ -137,6 +144,7 @@ class Orders(Model, BaseModel):
     start_time = Column(DateTime, default=datetime.now, nullable=True, comment="会员开始时间")
     duration = Column(Integer, default=0, nullable=True, comment="会员时长|天")
     membership_id = Column(Integer, ForeignKey('membership.id'))
+    membership = relationship("Membership", foreign_keys=[membership_id])
     order_id = Column(String(50), comment="订单ID")
     devices = relationship("Device")
 

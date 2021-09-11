@@ -3,10 +3,11 @@
 import time
 
 from inspect import isclass
-from flask import Blueprint, current_app, request, render_template
+from flask import Blueprint, current_app, request, render_template, make_response
 
 from flask_login import current_user, login_required
 from flask_restful import Resource, abort
+from flask_wtf import csrf
 
 routes = Blueprint("riverboat", __name__)
 
@@ -14,7 +15,10 @@ routes = Blueprint("riverboat", __name__)
 @routes.route('/', defaults={'path': ''})
 @routes.route('/<path:path>')
 def catch_all(path):
-    return render_template("/index.html")
+    csrf_token = csrf.generate_csrf()
+    resp = make_response(render_template('index.html'))
+    resp.set_cookie("csrf_token", csrf_token)
+    return resp
 
 
 class BaseResource(Resource):

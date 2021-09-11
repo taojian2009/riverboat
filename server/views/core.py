@@ -1,10 +1,14 @@
+import json
 from . import api
-from flask import jsonify, render_template, request
-from server.model import Asset, Income, Outcome, Debt
+
+from flask import jsonify, render_template, request, make_response
+from server.model import Asset, Income, Outcome, Debt, Orders, Device
 from server.models.base import db
 from sqlalchemy import func, and_
 from datetime import datetime, timedelta
 import pandas as pd
+import requests
+from config import Config
 
 model_dict = {
     "income": Income,
@@ -88,3 +92,28 @@ def card_data():
     df = df.sort_values(by=["title"], ascending=True)
     payload = {"items": df.to_dict(orient="records"), "trend": {}, "dateType": date_type}
     return jsonify(data=payload)
+
+
+@api.route("/get_code", methods=["POST"])
+def get_code():
+    order_id = request.json.get("order_id")
+    device_uuid = request.json.get("uuid")
+    order = db.session.query(Orders).filter_by(order_id=order_id).first()
+    if not order.is_valid:
+        return "you account is suspended, click this url to buy another one"
+
+    device_uuids = [device.device_uuid for device in order.devices]
+    if device_uuid in device_uuids:
+        # todo, fetch code from remote to user
+        membership = order.membership
+        params = membership.email_config()
+        res = requests.get(Config.SERVER_HOST, params=params)
+        return res.json()  # todo
+    else:
+        if len(device_uuids) >= 3:
+            return make_response("WARNING", 401)
+        device = Device(device_uuid=device_uuid)
+        order.devices.append(device)
+        db.session.commit()
+        # todo give code to user
+        return jsonify(data=order.to_user())  # todo

@@ -65,7 +65,9 @@ def stop_timer(response):
     d = request.form.to_dict() or {}
     # request parameters can overwrite post body
     request_params = request.args.to_dict()
+    json_data = {} if request.json is None else dict(request.json)
     d.update(request_params)
+    d.update(json_data)
     params = ''
     try:
         params = json.dumps(d, ensure_ascii=False)
