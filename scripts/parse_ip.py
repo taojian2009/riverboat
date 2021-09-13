@@ -21,13 +21,13 @@ def get_session():
 
 if __name__ == '__main__':
     engine = get_engine()
-    sql = "select distinct remote_addr from request_log"
+    sql = "select distinct remote_addr from request_log where country_code is NULL;"
     df = pd.read_sql_query(sql, engine)
     import time
     for ip in df.remote_addr.values.tolist():
         extra = parse_location(ip)
         data = []
-        for k,v in extra.items():
+        for k, v in extra.items():
             if isinstance(v, str):
                 data.append(f' {k}="{v}" ')
             if isinstance(v, float):
