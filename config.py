@@ -17,3 +17,4 @@ class Config(object):
     TEMPLATES_FOLDER = os.path.join(BASE_DIR, 'webapp/build')
     LOG_FORMAT = '%(asctime)s pid:%(process)d %(levelname)s %(module)s - %(message)s'
     Log_LEVEL = logging.INFO
+    SERVER = 'imap.gmail.com'
