@@ -287,7 +287,7 @@ class OrderDetail extends React.Component {
 
                     {window.location.href.split('?')[0]}
                     <ClipContent
-                        text={window.location.href}
+                        text={window.location.href.split('?')[0]}
                     />
                     <br/>
                     请不用担心，所有信息保持不变。
