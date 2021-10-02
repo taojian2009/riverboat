@@ -1,7 +1,7 @@
 import React from 'react';
-import {Card, message, Descriptions, Space, Row, Col, Layout} from 'antd';
+import {Card, message, Descriptions, Space, Row, Col, Layout, Modal} from 'antd';
 import axios from 'axios';
-import AuthCode from "./AuthCode";
+import AuthCode, {ClipContent} from "./AuthCode";
 import {DeviceUUID} from 'device-uuid';
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -66,7 +66,8 @@ class OrderDetail extends React.Component {
     state = {
         data: {},
         isEducative: false,
-        isMobile: false
+        isMobile: false,
+        visible: false
     }
 
 
@@ -104,6 +105,9 @@ class OrderDetail extends React.Component {
             } else {
                 message.error("获取失败，请联系淘宝旺旺客服")
             }
+        })
+        this.setState({
+            visible: !this.props.isDns
         })
     }
 
@@ -269,6 +273,22 @@ class OrderDetail extends React.Component {
                     {isMobile && Mobile}
                     {!isMobile && Desktop}
                 </Layout>
+                <Modal
+                    visible={this.state.visible}
+                    onOk={()=>this.setState({visible: false})}
+                    onCancel={()=>this.setState({visible: false})}
+                    title={<b>重要通知</b>}
+                >
+                    您好，为了更好的服务广大用户，链接已经升级为域名，请保存一下链接。
+                    <br/>
+
+                    {window.location.href}
+                    <ClipContent
+                        text={window.location.href}
+                    />
+                    <br/>
+                    请不用担心，所有信息保持不变。
+                </Modal>
             </Layout>
 
         )

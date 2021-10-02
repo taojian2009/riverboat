@@ -5,12 +5,12 @@ import axios from "axios";
 import {CopyToClipboard} from "react-copy-to-clipboard/lib/Component";
 import {CopyOutlined} from '@ant-design/icons';
 
-const ClipContent = ({text}) => (
+export const ClipContent = ({text}) => (
     <CopyToClipboard
         text={text}
         onCopy={() => message.success("copied")}
     >
-        <Tooltip placement="bottomRight" title={"复制验证码"}>
+        <Tooltip placement="bottomRight" title={"点击复制"}>
             <CopyOutlined/>
         </Tooltip>
     </CopyToClipboard>

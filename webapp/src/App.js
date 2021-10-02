@@ -1,7 +1,7 @@
 import React from 'react';
 import Finance from "./pages";
 import Login from "./pages/login";
-import PrivateRoute from "./pages/auth"
+import PrivateRoute, {DnsRoute} from "./pages/auth"
 import Membership from "./pages/membership";
 import OrderDetail from './pages/membership/order';
 import {
@@ -18,7 +18,7 @@ const App = () => {
             <Switch>
                 <PrivateRoute path="/" exact component={Finance}/>
                 <PrivateRoute path="/membership" exact component={Membership}/>
-                <Route path="/order/:order_id" exact component={OrderDetail}/>
+                <DnsRoute path="/order/:order_id" exact component={OrderDetail}/>
                 <Route path="/login" exact component={Login}/>
             </Switch>
         </Router>
