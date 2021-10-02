@@ -76,6 +76,8 @@ class OrderDetail extends React.Component {
         const {match} = this.props;
         const {order_id} = match.params
 
+
+
         const device = new DeviceUUID();
         const uuid = device.get();
         const du = device.parse();
@@ -106,8 +108,9 @@ class OrderDetail extends React.Component {
                 message.error("获取失败，请联系淘宝旺旺客服")
             }
         })
+        const isDns = this.props.location.search.indexOf('isDns') !== -1
         this.setState({
-            visible: !this.props.isDns
+            visible: isDns
         })
     }
 

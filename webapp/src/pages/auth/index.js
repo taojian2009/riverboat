@@ -15,10 +15,10 @@ const PrivateRoute = ({component: Component, ...rest}) => {
 
 export const DnsRoute = ({component: Component, ...rest}) => {
     const url = window.location.href;
-    const isDns = url.indexOf("datapyer") !== -1
+    const isDns = url.indexOf("zhixingyouxue") !== -1
     if (isDns === false){
         const orderId = url.split('/')[4];
-        window.location.href = `http://www.datapyer.com/order/${orderId}`
+        window.location.href = `http://www.zhixingyouxue.com/order/${orderId}?isDns=1`
         return
     }
     return ((
