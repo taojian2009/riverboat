@@ -285,7 +285,7 @@ class OrderDetail extends React.Component {
                     您好，为了更好的服务广大用户，链接已经升级为域名，请保存一下链接。
                     <br/>
 
-                    {window.location.href}
+                    {window.location.href.split('?')[0]}
                     <ClipContent
                         text={window.location.href}
                     />
