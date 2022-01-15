@@ -72,7 +72,7 @@ class SendForm extends React.PureComponent {
         }
 
         return (
-            <Card title="发货模板" extra={<a href="#">More</a>} style={{height: '80vh', margin: 10}}>
+            <Card>
                 <Form
                     {...layout}
                     name="basic"
@@ -94,7 +94,7 @@ class SendForm extends React.PureComponent {
                         name={'duration'}
                         label="会员有效期/天"
                     >
-                        <InputNumber min={0} max={10000} />
+                        <InputNumber min={0} max={10000}/>
                     </Form.Item>
 
                     <Form.Item
@@ -109,14 +109,13 @@ class SendForm extends React.PureComponent {
                     </Form.Item>
 
 
-
-
                     <Form.Item  {...formTailLayout}>
                         <Button type="primary" htmlType="submit">
                             Submit
                         </Button>
                     </Form.Item>
                 </Form>
+                <a href="/memberships">返回使用旧版</a>
             </Card>
         )
     }

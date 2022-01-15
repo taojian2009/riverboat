@@ -21,13 +21,12 @@ class OrdersResource(BaseResource):
 
 
 class OrderResource(BaseResource):
-
     def post(self):
         form = dict(request.json)
         form['start_time'] = parse_human_time(form['start_time'])
+        form['buyer_email'] = 'zoe@me.com'
+        form['buyer_phone'] = '15123035649'
         obj = Orders.create_one(form)
-        # items = Orders.all().all()
-        # data = [item.to_dict() for item in items]
         return jsonify(data=obj.to_dict())
 
     def get(self):

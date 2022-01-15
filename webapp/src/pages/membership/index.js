@@ -45,7 +45,8 @@ class Order extends React.Component {
                 <Col span={17}>
                     <Orders
                         data={orders}
-                    /></Col>
+                    />
+                </Col>
             </Row>
         )
     }

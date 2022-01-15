@@ -138,3 +138,11 @@ def click_goods():
     good_id = request.args.get("good_id")
     url = f"https://item.taobao.com/item.html?id={good_id}"
     return jsonify(status="ok")
+
+@api.route('/account_balance')
+def account_balance():
+    sql = """
+    
+    
+    """
+    return 12312
