@@ -3,17 +3,16 @@ import logging
 from server.model import Membership
 import imaplib
 import warnings
+import time
 from sqlalchemy import exc as sa_exc
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", category=sa_exc.SAWarning)
-
 from config import Config
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 logging.basicConfig(level=Config.Log_LEVEL, format=Config.LOG_FORMAT, filemode='a')
 logger = logging.getLogger(__name__)
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=sa_exc.SAWarning)
 
 
 def get_engine():
@@ -38,8 +37,10 @@ def delete_all_emails(username, password):
     mail_ids = []
     for block in data:
         mail_ids += block.split()
-    final_mail = None
     count = 0
+    if not mail_ids:
+        logger.info("No emails were found, will skip this job. ")
+        return
     for i in mail_ids:
         mail.store(i, "+FLAGS", "\\Deleted")
         count += 1
@@ -57,6 +58,7 @@ def clear_inbox(session):
         pwd = membership.pwd.strip()
         logger.info("successfully get account %s with password", email)
         delete_all_emails(email, pwd)
+        time.sleep(5)
 
 
 if __name__ == '__main__':
