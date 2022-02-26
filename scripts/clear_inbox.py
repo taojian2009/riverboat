@@ -27,17 +27,22 @@ def get_session():
 def delete_all_emails(username, password):
     logger.info("start to delete all emails for account: %s", username)
     # create an IMAP4 class with SSL
-    imap = imaplib.IMAP4_SSL("imap.gmail.com")
-    # authenticate
-    imap.login(username, password)
+    mail = imaplib.IMAP4_SSL('imap.gmail.com')
+    mail.login(username, password)
+    mail.select('inbox')
     logger.info('login successful with %s, start to enter inbox', username)
-    imap.select("INBOX")
-    status, messages = imap.search(None, "ALL")
+    status, data = mail.search(None, 'ALL')
+    mail_ids = []
+    for block in data:
+        mail_ids += block.split()
+    final_mail = None
     count = 1
-    for mail in messages:
-        logger.info("deleting the %s email", str(count))
-        imap.store(mail, "+FLAGS", "\\Deleted")
-        count +=1
+    for i in mail_ids:
+        mail.store(i, "+FLAGS", "\\Deleted")
+        logger.info("%s mail has been removed", str(count))
+        count += 1
+    mail.close()
+    mail.logout()
     logger.info("successfully delete %s emails for account: %s", str(count), username)
 
 

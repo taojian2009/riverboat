@@ -1,16 +1,12 @@
 #!/bin/bash
 
-env='dev'
-# init the env
+work_dir=/root/riverboat
+cd $work_dir
+source prod.sh
+source ~/.virtualenvs/riverboat/bin/activate
 
-WORK_DIR=../
-cd $WORK_DIR
 
-source venv/bin/activate
-
-source "$env".env
-
-python scripts/clear_inbox.py
+python scripts/clear_inbox.py >> logs/clear.log 2>&1
 
 
 
