@@ -2,8 +2,11 @@ from sqlalchemy import create_engine, and_
 import logging
 from server.model import Membership
 import imaplib
-import email
-from email.header import decode_header
+import warnings
+from sqlalchemy import exc as sa_exc
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=sa_exc.SAWarning)
 
 from config import Config
 from sqlalchemy import create_engine
@@ -36,11 +39,11 @@ def delete_all_emails(username, password):
     for block in data:
         mail_ids += block.split()
     final_mail = None
-    count = 1
+    count = 0
     for i in mail_ids:
         mail.store(i, "+FLAGS", "\\Deleted")
-        logger.info("%s mail has been removed", str(count))
         count += 1
+        logger.info("%s mail has been removed", str(count))
     mail.close()
     mail.logout()
     logger.info("successfully delete %s emails for account: %s", str(count), username)
