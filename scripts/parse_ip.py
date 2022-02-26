@@ -34,6 +34,9 @@ if __name__ == '__main__':
                 data.append(f' {k}={v} ')
         snippet = ",".join(data)
         sql = f"""update request_log set {snippet} where remote_addr="{ip}";"""
-        engine.execute(sql)
+        try:
+            engine.execute(sql)
+        except:
+            print(data)
         print(sql)
         time.sleep(2)
