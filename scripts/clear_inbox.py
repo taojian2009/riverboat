@@ -46,7 +46,7 @@ def delete_all_emails(username, password):
         logger.info("%s mail has been removed", str(count))
     mail.close()
     mail.logout()
-    logger.info("successfully delete %s emails for account: %s", str(count), username)
+    logger.info("successfully delete %s emails for account: %s", str(len(mail_ids)), username)
 
 
 def clear_inbox(session):
