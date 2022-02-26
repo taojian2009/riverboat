@@ -139,10 +139,23 @@ def click_goods():
     url = f"https://item.taobao.com/item.html?id={good_id}"
     return jsonify(status="ok")
 
-@api.route('/account_balance')
-def account_balance():
-    sql = """
-    
-    
+
+@api.route('/usage')
+def usage():
+    days_before = request.args.get('days_before', 7)
+    sql = f"""
+     WITH order_used AS (SELECT json_unquote(json_extract(params, '$.order_id')) AS order_id, id
+                         FROM request_log
+                         WHERE create_time > DATE_SUB(CURDATE(), INTERVAL {days_before} DAY)
+                           AND endpoint = '/get_code'
+                         ORDER BY id DESC)
+     SELECT m.name, count(1) AS cnt
+     FROM order_used u
+              LEFT JOIN orders o ON u.order_id = o.order_id
+              LEFT JOIN membership m ON o.membership_id = m.id
+     GROUP BY m.name
+     ORDER BY cnt DESC;
     """
-    return 12312
+    df = pd.read_sql_query(sql, db.engine)
+    records = df.to_dict(orient='records')
+    return jsonify(data=records)
