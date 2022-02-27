@@ -27,7 +27,8 @@ const formTailLayout = {
 class SendForm extends React.PureComponent {
 
     state = {
-        memberships: []
+        memberships: [],
+        usage: []
     }
 
     componentDidMount = () => {
@@ -36,6 +37,14 @@ class SendForm extends React.PureComponent {
                 const {data} = res.data
                 this.setState({
                     memberships: data
+                })
+            })
+        axios.get('/usage?days_before=1')
+            .then(res => {
+                const {data} = res.data;
+                console.log({usage: data})
+                this.setState({
+                    usage: data
                 })
             })
     }
@@ -63,16 +72,22 @@ class SendForm extends React.PureComponent {
     render() {
 
 
-        const {memberships} = this.state;
+        const {memberships, usage} = this.state;
         const initialValues = {
             membership_id: memberships.length > 0 ? memberships[0].value : 1,
             duration: 30,
             start_time: moment(),
-
         }
 
         return (
             <Card>
+                <h4>过去1天请求情况</h4>
+                {usage && usage.map(({name, cnt}, index) => (
+                    <p>{name}: {cnt}  </p>
+                ))}
+
+                <hr/>
+
                 <Form
                     {...layout}
                     name="basic"

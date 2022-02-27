@@ -81,6 +81,8 @@ class H5NumberInputExample extends React.Component {
         this.setState({
             incomes: incomes.filter(item => item.id !== id)
         })
+        axios.defaults.xsrfHeaderName = "X-CSRFToken"
+        axios.defaults.xsrfCookieName = 'csrf_token'
         axios.delete('/model', {
             params: params
         }).then(res => {
