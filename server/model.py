@@ -203,6 +203,7 @@ class Orders(Model, BaseModel):
     membership = relationship("Membership", foreign_keys=[membership_id])
     order_id = Column(String(50), comment="订单ID")
     devices = relationship("Device")
+    is_activated = Column(Boolean, default=True)
 
     @property
     def start_date(self):
@@ -237,6 +238,7 @@ class Orders(Model, BaseModel):
     @classmethod
     def create_one(cls, form):
         obj = cls(**form)
+        obj.is_activated = True
         obj.make_order_id()
         db.session.add(obj)
         db.session.commit()

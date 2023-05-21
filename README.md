@@ -11,3 +11,10 @@ print("hello")
 #### Unique URL for getting code.
 
 
+### install bfa 
+
+```shell 
+cd ./packages/bfa_python
+python setup.py install 
+```
+
