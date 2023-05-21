@@ -227,13 +227,21 @@ class Orders(Model, BaseModel):
 
     @property
     def is_valid(self):
-        return self.valid_days > 0
+        now = datetime.now()
+        duration = timedelta(days=self.duration) - (now - self.start_time)
+        total_seconds = duration.total_seconds()
+        return total_seconds > 0
 
     @property
     def valid_days(self):
         now = datetime.now()
         duration = timedelta(days=self.duration) - (now - self.start_time)
-        return duration.days
+        total_seconds = duration.total_seconds()
+        days, remainder = divmod(total_seconds, 86400)  # 86400 seconds in a day
+        hours, remainder = divmod(remainder, 3600)  # 3600 seconds in an hour
+        minutes, seconds = divmod(remainder, 60)
+        days = f'{int(days)}天{int(hours)}小时{int(minutes)}分{int(seconds)}秒'
+        return days
 
     @classmethod
     def create_one(cls, form):

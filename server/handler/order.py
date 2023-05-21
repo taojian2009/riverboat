@@ -7,6 +7,7 @@ from server.model import Income
 from server.utils import parse_human_time
 import bfa
 import logging
+from datetime import datetime
 
 from .base import BaseResource, paginate
 from flask import jsonify
@@ -33,6 +34,14 @@ class OrderResource(BaseResource):
         order_id = request.args.get('order_id')
         device_uuid = request.args.get("uuid")
         order = Orders.query.filter_by(order_id=order_id).first()
+
+        if not order.is_activated:
+            order.start_time = datetime.now()
+            order.is_activated = True
+            logging.info(f'order id <{order.order_id}> is not activated, set start_time as now <{order.start_time}>, and activate it.')
+            db.session.commit()
+        else:
+            logging.info(f'order id <{order.order_id}> is activated, skip modify the start time')
         devices = order.devices
         device_uuids = [device.device_uuid for device in devices]
         if session.get("user_id"):
