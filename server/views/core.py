@@ -108,7 +108,7 @@ def get_code():
         return "you account is suspended, click this url to buy another one"
     device_uuids = [device.device_uuid for device in order.devices]
     if device_uuid in device_uuids:
-        return utils.fetch_code(order, Config.SERVER_HOST)
+        return utils.generate_code()
     else:
         if len(device_uuids) >= 3:
             return make_response("WARNING", 401)

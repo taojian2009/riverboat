@@ -12,6 +12,7 @@ class Config(object):
     CSRF_COOKIE_NAME = "XSRF-TOKEN"
     SECRET_KEY = os.environ.get("SECRET_KEY")
     SERVER_HOST = os.environ.get("SERVER_HOST")
+    TWO_FA_SECRET = os.environ.get('TWO_FA_SECRET')
     BASE_DIR = os.getcwd()
     STATIC_FOLDER = os.path.join(BASE_DIR, 'webapp/build/static')
     TEMPLATES_FOLDER = os.path.join(BASE_DIR, 'webapp/build')

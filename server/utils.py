@@ -106,6 +106,36 @@ def fetch_code(order, host):
     except Exception as e:
         return jsonify(code='0', error=str(e))
 
+def generate_code():
+    import pyotp
+    import base64
+
+    # Function to clean and verify the base32 key
+    def clean_base32_key(raw_key):
+        # Remove spaces and make uppercase
+        clean_key = raw_key.replace(" ", "").upper()
+        # Pad with '=' to make the length a multiple of 8
+        clean_key += '=' * ((8 - len(clean_key) % 8) % 8)
+        try:
+            # Try to decode to verify correctness
+            base64.b32decode(clean_key)
+            return clean_key
+        except base64.binascii.Error:
+            return None
+
+    # Your provided key (make sure to replace this with the correct key without spaces or invalid characters)
+    formatted_secret = clean_base32_key(config.Config.TWO_FA_SECRET)
+
+    if formatted_secret:
+        totp = pyotp.TOTP(formatted_secret)
+        print("Current OTP:", totp.now())
+        return jsonify(code=totp.now())
+    else:
+        e = "Invalid base32 key. Please check the key format."
+        return jsonify(code='0', error=str(e))
+
+
+
 
 def parse_location(ip):
     data = {}
